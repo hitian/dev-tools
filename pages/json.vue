@@ -9,7 +9,7 @@
                 </p>
             </div>
             <div class="form-group">
-                <button @click="Pretty" class="btn btn-primary">Show</button>
+                <button @click="show" class="btn btn-primary">Pretty</button>
             </div>
         </div>
         <p>
