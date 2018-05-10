@@ -34,6 +34,13 @@ module.exports = {
      ** Build configuration
      */
     build: {
+        vendor: [
+            'js-base64',
+            'vue-json-pretty',
+            'locutus/php/var/unserialize',
+            'locutus/php/var/serialize',
+            'moment-timezone',
+        ],
         /*
          ** Run ESLint on save
          */
