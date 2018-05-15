@@ -4,17 +4,15 @@
         <div class="form">
             <div class="form-group">
                 <textarea class="form-control" v-model="input" placeholder="input here" cols="30" rows="10"></textarea>
-                <p class="help-block alert alert-warning" v-if="message">
-                    {{message}}
-                </p>
             </div>
             <div class="form-group">
                 <button @click="decode" class="btn btn-primary">decode</button>
                 <button @click="encode" class="btn btn-warning ml-5">encode</button>
-                
+                <span v-if="message" class="badge badge-warning ml-3">{{message}}</span>
+                <span v-if="copy_success" class="badge badge-success ml-3">result copied to clipboard</span>
             </div>
             <div class="form-group">
-                <textarea class="form-control" v-model="output" placeholder="result here" cols="30" readonly rows="10"></textarea>
+                <textarea class="form-control" @click="copyResult" v-model="output" placeholder="result here" cols="30" readonly rows="10"></textarea>
             </div>
         </div>
     </div>
@@ -26,7 +24,8 @@ export default {
         return {
             message: "",
             input: "",
-            output: ""
+            output: "",
+            copy_success: false,
         }
     },
     methods: {
@@ -57,6 +56,26 @@ export default {
             setTimeout(() => {
                 this.message = "";
             }, 5000);
+        },
+        showCopySuccess() {
+            this.copy_success = true;
+            setTimeout(() => {
+                this.copy_success = false;
+            }, 5000);
+        },
+        copyResult(event) {
+            let resultBox = event.target;
+            resultBox.focus();
+            resultBox.select();
+            try {
+                var isCopySuccess = document.execCommand('copy');
+                if (isCopySuccess) {
+                    this.showCopySuccess();
+                    return;
+                }
+            } catch(err) {  
+                console.log('Oops, unable to copy: ' + err);  
+            }
         }
     }
 }
