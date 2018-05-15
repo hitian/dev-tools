@@ -2,6 +2,8 @@
 
 > dev tools.
 
+![Build_Status](https://api.travis-ci.org/hitian/dev-tools.svg?branch=master)
+
 ## Build Setup
 
 ``` bash
