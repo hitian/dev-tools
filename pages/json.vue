@@ -3,7 +3,7 @@
         <h5>JSON Tree View</h5>
         <div class="form">
             <div class="form-group">
-                <textarea class="form-control" v-model="input" placeholder="input here" cols="30" rows="10"></textarea>
+                <textarea class="form-control" v-on:dblclick="selectAll" v-model="input" placeholder="input here" cols="30" rows="10"></textarea>
                 <p class="help-block alert alert-warning" v-if="message">
                     {{message}}
                 </p>
@@ -54,6 +54,9 @@ export default {
             setTimeout(() => {
                 this.message = "";
             }, 5000);
+        },
+        selectAll(event) {
+            event.target.select();
         }
     }
 }

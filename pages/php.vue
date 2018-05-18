@@ -3,7 +3,7 @@
         <h5>PHP Serialize</h5>
         <div class="form">
             <div class="form-group">
-                <textarea class="form-control" v-model="input" placeholder="input here" cols="30" rows="10"></textarea>
+                <textarea class="form-control" v-on:dblclick="selectAll" v-model="input" placeholder="input here" cols="30" rows="10"></textarea>
             </div>
             <div class="form-group">
                 <button @click="decode" class="btn btn-primary">decode</button>
@@ -98,6 +98,9 @@ export default {
             } catch(err) {  
                 console.log('Oops, unable to copy: ' + err);  
             }
+        },
+        selectAll(event) {
+            event.target.select();
         }
     }
 }
