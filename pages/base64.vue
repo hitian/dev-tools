@@ -12,7 +12,7 @@
                 <span v-if="copy_success" class="badge badge-success ml-3">result copied to clipboard</span>
             </div>
             <div class="form-group">
-                <textarea class="form-control" @click="copyResult" v-model="output" placeholder="result here" cols="30" readonly rows="10"></textarea>
+                <textarea class="form-control" @click="copyResult" v-model="output" placeholder="result here" cols="30" readonly rows="15"></textarea>
             </div>
         </div>
     </div>

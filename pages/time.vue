@@ -1,35 +1,38 @@
 <template>
     <div>
         <div class="alert alert-info clearfix">
-            TimeZone: {{current_timezone}}
-
-            <div class="float-right form-inline">
-                <div class="form-group">
-                    <input class="form-control" type="text" v-model="search_timezone_input" placeholder="search">
-                </div>
-                <div class="form-group">
-                    <select id="timezone-select" @change="selectedTimezone" v-model="selected_timezone" class="form-control">
-                        <option v-for="(timezone, index) in timezoneNameList" :key="index">{{timezone}}</option>
-                    </select>
-                </div>
-                
-                
+            <label class="col-form-label">TimeZone: {{current_timezone}}</label>
+            <div class="input-group col-md-5 float-right">
+                <input class="form-control" type="text" v-model="search_timezone_input" placeholder="search">
+                <select id="timezone-select" @change="selectedTimezone" v-model="selected_timezone" class="form-control">
+                    <option v-for="(timezone, index) in timezoneNameList" :key="index">{{timezone}}</option>
+                </select>
             </div>
         </div>
-        <div class="card">
+        <div class="card mb-3">
             <div class="card-body">
                 <div class="card-title">
                     Now
                 </div>
                 <div class="row">
-                    <div class="col-md-3">unix timestamp: <span class="badge badge-primary">{{ now }}</span></div>
-                    <div class="col-md-3">datetime: <span class="badge badge-success">{{now_datetime}}</span></div>
-                    <button @click="refreshNow" class="btn btn-info ml-5">Update</button>
+                    <div class="input-group col-md-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" style="background-color: #FFDC00;">Unix Timestamp</span>
+                        </div>
+                        <input type="text" class="form-control" v-model="now" readonly onClick="this.select();" />
+                    </div>
+                    <div class="input-group col-md-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" style="background-color: #7FDBFF;">Datetime</span>
+                        </div>
+                        <input type="text" class="form-control" v-model="now_datetime" readonly onClick="this.select();" />
+                    </div>
                 </div>
+                
                 
             </div>
         </div>
-        <div class="card">
+        <div class="card mb-3">
             <div class="card-body">
                 <div class="card-title">
                     timestamp to time
@@ -52,7 +55,7 @@
                 </div>
             </div>
         </div>
-        <div class="card">
+        <div class="card mb-3">
             <div class="card-body">
                 <div class="card-title">
                     time info
