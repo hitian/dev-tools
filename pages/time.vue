@@ -15,13 +15,13 @@
                     Now
                 </div>
                 <div class="row">
-                    <div class="input-group col-md-4">
+                    <div class="input-group col">
                         <div class="input-group-prepend">
                             <span class="input-group-text" style="background-color: #FFDC00;">Unix Timestamp</span>
                         </div>
                         <input type="text" class="form-control" v-model="now" readonly onClick="this.select();" />
                     </div>
-                    <div class="input-group col-md-4">
+                    <div class="input-group col">
                         <div class="input-group-prepend">
                             <span class="input-group-text" style="background-color: #7FDBFF;">Datetime</span>
                         </div>
