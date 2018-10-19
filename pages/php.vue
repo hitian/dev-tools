@@ -29,6 +29,14 @@ export default {
             copy_success: false,
         }
     },
+    head () {
+        return {
+            title: "PHP serialize & unserialize",
+            meta: [
+                { hid: 'description', name: 'description', content: 'PHP serialize & unserialize' }
+            ]
+        }
+    },
     methods: {
         encode() {
             if (this.input.length == "") {

@@ -7,16 +7,16 @@
         <div class="collapse navbar-collapse" id="navbarToggler">
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                 <li class="nav-item">
-                    <nuxt-link class="nav-link" to="/time">Time</nuxt-link>
+                    <nuxt-link class="nav-link" to="/time">Time & Timestamp</nuxt-link>
                 </li>
                 <li class="nav-item">
-                    <nuxt-link class="nav-link" to="/base64">Base64</nuxt-link>
+                    <nuxt-link class="nav-link" to="/base64">Base64 encode & decode</nuxt-link>
                 </li>
                 <li class="nav-item">
-                    <nuxt-link class="nav-link" to="/json">Json</nuxt-link>
+                    <nuxt-link class="nav-link" to="/json">Json tree view</nuxt-link>
                 </li>
                 <li class="nav-item">
-                    <nuxt-link class="nav-link" to="/php">PHP</nuxt-link>
+                    <nuxt-link class="nav-link" to="/php">PHP serialize</nuxt-link>
                 </li>
             </ul>
         </div>

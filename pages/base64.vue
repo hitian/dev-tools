@@ -28,6 +28,14 @@ export default {
             copy_success: false,
         }
     },
+    head () {
+        return {
+            title: "base64 encode & decode",
+            meta: [
+                { hid: 'description', name: 'description', content: 'base64 encode & decode' }
+            ]
+        }
+    },
     methods: {
         encode() {
             if (this.input.length == "") {
