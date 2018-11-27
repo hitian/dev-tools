@@ -99,6 +99,14 @@ export default {
             search_timezone_input: "",
         }
     },
+    head () {
+        return {
+            title: "time & timestamp convert",
+            meta: [
+                { hid: 'description', name: 'description', content: 'time & timestamp convert, timezone' }
+            ]
+        }
+    },
     computed: {
         nowffda() {
             return moment().unix();

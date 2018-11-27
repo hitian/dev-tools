@@ -31,6 +31,14 @@ export default {
             message: "",
         }
     },
+    head () {
+        return {
+            title: "JSON Tree View",
+            meta: [
+                { hid: 'description', name: 'description', content: 'JSON string format' }
+            ]
+        }
+    },
     components: {
         VueJsonPretty
     },
