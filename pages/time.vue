@@ -115,7 +115,7 @@ export default {
             return moment(this.time_string).isValid() ? "Yes" : "No";
         },
         theTime() {
-            return moment.tz(moment(this.time_string), this.current_timezone);
+            return moment.tz(this.time_string, this.current_timezone);
         },
         Stimestamp() {
             let time = this.theTime;
