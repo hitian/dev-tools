@@ -48,8 +48,8 @@
                         <button @click="timeStringListClean" class="form-control btn btn-warning">Clean</button>
                     </div>
                 </div>
-                <div class="mt-2">
-                    <span v-if="time_string_list" v-for="(item, index) in time_string_list" :key="index" class="badge badge-success ml-1">
+                <div class="mt-2" v-if="time_string_list">
+                    <span v-for="(item, index) in time_string_list" :key="index" class="badge badge-success ml-1">
                         {{ item }}
                     </span>
                 </div>

@@ -18,6 +18,9 @@
                 <li class="nav-item">
                     <nuxt-link class="nav-link" to="/php">PHP serialize</nuxt-link>
                 </li>
+                <li class="nav-item">
+                    <nuxt-link class="nav-link" to="/url">URL encode & decode</nuxt-link>
+                </li>
             </ul>
         </div>
     </nav>
