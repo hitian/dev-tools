@@ -3,7 +3,7 @@ jobs:
   build:
     docker:
       - image: circleci/node
-    step:
+    steps:
       - checkout
       - restore_cache:
         keys:
