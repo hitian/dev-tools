@@ -30,7 +30,7 @@ export default {
     },
     head () {
         return {
-            title: "URL encode & decode",
+            title: "URL Encode & Decode",
             meta: [
                 { hid: 'description', name: 'description', content: 'URL encode & decode' }
             ]
