@@ -6,21 +6,21 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-        keys:
-          # when lock file changes, use increasingly general patterns to restore cache
-          - yarn-packages-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
-          - yarn-packages-v1-{{ .Branch }}-
-          - yarn-packages-v1-
+          keys:
+            # when lock file changes, use increasingly general patterns to restore cache
+            - yarn-packages-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - yarn-packages-v1-{{ .Branch }}-
+            - yarn-packages-v1-
       - run:
-        name: Yarn Install
-        command: yarn
+          name: Yarn Install
+          command: yarn
       - save_cache:
-        paths:
-          - ~/.cache/yarn
-        key: yarn-packages-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
+          key: yarn-packages-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
       - run:
-        name: build
-        command: yarn run build
+          name: build
+          command: yarn run build
       - deploy:
-        name: Deploy
-        command: yarn run deploy
+          name: Deploy
+          command: yarn run deploy
