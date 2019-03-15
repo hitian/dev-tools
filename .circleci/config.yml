@@ -25,7 +25,7 @@ jobs:
           name: Deploy github pages
           command: |
             mkdir publish
-            git clone $CIRCLE_REPOSITORY_URL --branch gh-pages publish
+            git clone https://hitian:$GITHUB_TOKEN@github.com/hitian/dev-tools.git --branch gh-pages publish
             pushd publish
             rm -rf ./*
             cp -r ../dist/* .
