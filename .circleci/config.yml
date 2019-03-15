@@ -10,16 +10,14 @@ jobs:
       - restore_cache:
           keys:
             # when lock file changes, use increasingly general patterns to restore cache
-            - yarn-packages-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
-            - yarn-packages-v1-{{ .Branch }}-
-            - yarn-packages-v1-
+            - yarn-packages-v1-{{ checksum "yarn.lock" }}
       - run:
           name: Yarn Install
           command: yarn
       - save_cache:
           paths:
             - ~/.cache/yarn
-          key: yarn-packages-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          key: yarn-packages-v1-{{ checksum "yarn.lock" }}
       - run:
           name: build
           command: yarn run build
@@ -40,7 +38,7 @@ jobs:
               # Uncommitted changes
               git config user.email "ci-bot@hitian.info"
               git config user.name "ci-bot"
-              git commit -m "ci build."
+              git commit -m "ci build. [ci skip]"
               git push origin gh-pages
               echo "update ok."
             fi
