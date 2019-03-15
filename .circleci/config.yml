@@ -33,7 +33,15 @@ jobs:
             cp -r ../dist/* .
             echo 'tools.less.run' > CNAME
             git add --all
-            git config user.email "ci-bot@hitian.info"
-            git config user.name "ci-bot"
-            git commit -m "ci build."
-            [ $(git rev-parse HEAD) != $(git rev-parse @{u}) ] && git push origin gh-pages
+            if [ -z "$(git diff --cached --name-only)" ]; then 
+              # Working directory clean
+              echo "no change, end."
+            else 
+              # Uncommitted changes
+              git config user.email "ci-bot@hitian.info"
+              git config user.name "ci-bot"
+              git commit -m "ci build."
+              git push origin gh-pages
+              echo "update ok."
+            fi
+            
