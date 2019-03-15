@@ -36,4 +36,4 @@ jobs:
             git config user.email "ci-bot@hitian.info"
             git config user.name "ci-bot"
             git commit -m "ci build."
-            git push origin gh-pages
+            [ $(git rev-parse HEAD) != $(git rev-parse @{u}) ] && git push origin gh-pages
