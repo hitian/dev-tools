@@ -1,6 +1,9 @@
 version: 2
 jobs:
   build:
+    branches:
+      only:
+        - master
     docker:
       - image: circleci/node
     steps:
@@ -29,6 +32,7 @@ jobs:
             pushd publish
             rm -rf ./*
             cp -r ../dist/* .
+            echo 'tools.less.run' > CNAME
             git add --all
             git config user.email "ci-bot@hitian.info"
             git config user.name "ci-bot"
