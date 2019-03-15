@@ -2,7 +2,7 @@
 
 > dev tools.
 
-[![Build Status](https://travis-ci.org/hitian/dev-tools.svg?branch=master)](https://travis-ci.org/hitian/dev-tools)
+[![CircleCI](https://circleci.com/gh/hitian/dev-tools/tree/master.svg?style=svg)](https://circleci.com/gh/hitian/dev-tools/tree/master)
 ![license](https://img.shields.io/github/license/mashape/apistatus.svg)
 [![Website](https://img.shields.io/website-up-down-green-red/http/tools.less.run.svg?label=website)](https://tools.less.run)
 
