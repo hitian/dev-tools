@@ -22,11 +22,15 @@ jobs:
           name: build
           command: yarn run build
       - run:
-          name: Deploy Setup
+          name: Deploy github pages
           command: |
-            npm install -g --silent gh-pages
-            git config user.email "ci-bot@circleci.org"
-            git config user.name "circleci-bot"
-      - run:
-          name: Deploy
-          command: gh-pages --dist dist
+            mkdir publish
+            git clone $CIRCLE_REPOSITORY_URL --branch gh-pages publish
+            pushd publish
+            rm -rf ./*
+            cp -r ../dist/* .
+            git add --all
+            git config user.email "ci-bot@hitian.info"
+            git config user.name "ci-bot"
+            git commit -m "ci build."
+            git push origin gh-pages
