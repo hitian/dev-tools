@@ -9,6 +9,7 @@
                     minMatchingChars=1
                     placeholder="type to search"
                     @hit="selectedTimezone"
+                    maxMatches=1000
                 />
                 <div class="input-group-append">
                     <button class="btn btn-warning" @click="selectedTimezone" type="button">Change</button>
