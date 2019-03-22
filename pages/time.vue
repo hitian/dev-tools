@@ -2,11 +2,17 @@
     <div>
         <div class="alert alert-info clearfix">
             <label class="col-form-label">TimeZone: {{current_timezone}}</label>
-            <div class="input-group col-md-5 float-right">
-                <input class="form-control" type="text" v-model="search_timezone_input" placeholder="search">
-                <select id="timezone-select" @change="selectedTimezone" v-model="selected_timezone" class="form-control">
-                    <option v-for="(timezone, index) in timezoneNameList" :key="index">{{timezone}}</option>
-                </select>
+            <div class="input-group col-md-4 float-right">
+                <vue-bootstrap-typeahead 
+                    v-model="selected_timezone"
+                    :data="timezoneNameList"
+                    minMatchingChars=1
+                    placeholder="type to search"
+                    @hit="selectedTimezone"
+                />
+                <div class="input-group-append">
+                    <button class="btn btn-warning" @click="selectedTimezone" type="button">Change</button>
+                </div>
             </div>
         </div>
         <div class="card mb-3">
@@ -84,8 +90,12 @@
 var moment = require('moment-timezone');
 const time_format_string = "YYYY-MM-DD HH:mm:ss ZZ";
 const localStorage = window.localStorage;
+import VueBootstrapTypeahead from 'vue-bootstrap-typeahead'
 
 export default {
+    components: {
+        VueBootstrapTypeahead
+    },
     data() {
         return {
             now: moment().unix(),
@@ -146,6 +156,9 @@ export default {
             this.current_timezone = localStorage.timezone;
         }
         this.refreshNow();
+    },
+    mounted(){
+        // document.getElementById("timezone-input").typeahead({source: this.timezoneNameList})
     },
     methods: {
         timestampConvert() {
