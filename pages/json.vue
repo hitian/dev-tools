@@ -3,7 +3,7 @@
         <h5>JSON Tree View</h5>
         <div class="form">
             <div class="form-group">
-                <textarea class="form-control" v-on:dblclick="selectAll" v-model="input" placeholder="input here" cols="30" rows="10"></textarea>
+                <text-area v-model="input"></text-area>
                 <p class="help-block alert alert-warning" v-if="message">
                     {{message}}
                 </p>
@@ -20,9 +20,8 @@
     </div>
 </template>
 <script>
-//import Vue from 'vue'
 import VueJsonPretty from 'vue-json-pretty'
-// Vue.use(JsonTreeView);
+import TextArea from '~/components/TextArea.vue'
 export default {
     data() {
         return {
@@ -40,7 +39,7 @@ export default {
         }
     },
     components: {
-        VueJsonPretty
+        VueJsonPretty, TextArea
     },
     methods: {
         show() {
