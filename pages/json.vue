@@ -21,6 +21,7 @@
 </template>
 <script>
 import VueJsonPretty from 'vue-json-pretty'
+import 'vue-json-pretty/lib/styles.css';
 import TextArea from '~/components/TextArea.vue'
 export default {
     data() {
