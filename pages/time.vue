@@ -75,7 +75,8 @@
                 <div class="mt-2">
                     <ul>
                         <li> isValid: {{isValid}} </li>
-                        <li> Timestamp: {{Stimestamp}}</li>
+                        <li> Timestamp(seconds): {{Stimestamp}}</li>
+                        <li> Timestamp(milliseconds): {{StimestampMilliseconds}}</li>
                         <li> Day of Year: {{Sdayofyear}}</li>
                         <li> Week of Year: {{Sweekofyear}}</li>
                         <li> TimeZone: {{Stimezone}}</li>
@@ -103,7 +104,7 @@ export default {
             now_datetime: "",
             timestamp_value: "",
             time_string_list: [],
-            time_string: moment().format("YYYY-MM-DD HH:mm:ss"),
+            time_string: moment().format("YYYY-MM-DD HH:mm:ss.SSS"),
 
             current_timezone: "",
             selected_timezone: "",
@@ -131,6 +132,10 @@ export default {
         Stimestamp() {
             let time = this.theTime;
             return time.isValid() ? time.unix() : "-";
+        },
+        StimestampMilliseconds() {
+            let time = this.theTime;
+            return time.isValid() ? time.valueOf() : "-";
         },
         Sdayofyear() {
             let time = this.theTime;
