@@ -6,10 +6,9 @@
                 <vue-bootstrap-typeahead 
                     v-model="selected_timezone"
                     :data="timezoneNameList"
-                    minMatchingChars=1
                     placeholder="type to search"
                     @hit="selectedTimezone"
-                    maxMatches=1000
+                    :maxMatches="maxMatches"
                 />
                 <div class="input-group-append">
                     <button class="btn btn-warning" @click="selectedTimezone" type="button">Change</button>
@@ -109,6 +108,7 @@ export default {
             current_timezone: "",
             selected_timezone: "",
             search_timezone_input: "",
+            maxMatches: 1000,
         }
     },
     head () {

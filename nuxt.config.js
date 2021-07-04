@@ -1,4 +1,5 @@
 module.exports = {
+    target: 'static',
     ssr: false,
     /*
      ** Headers of the page
@@ -20,12 +21,6 @@ module.exports = {
             { src: '/js/bootstrap.min.js' }
         ]
     },
-    modules: [
-        // Simple usage
-        ['@nuxtjs/google-analytics', {
-            id: 'UA-118766518-1'
-        }]
-    ],
     /*
      ** Customize the progress bar color
      */
@@ -40,19 +35,6 @@ module.exports = {
             'locutus/php/var/unserialize',
             'locutus/php/var/serialize',
             'moment-timezone',
-        ],
-        /*
-         ** Run ESLint on save
-         */
-        extend(config, { isDev, isClient }) {
-            if (isDev && isClient) {
-                config.module.rules.push({
-                    enforce: 'pre',
-                    test: /\.(js|vue)$/,
-                    loader: 'eslint-loader',
-                    exclude: /(node_modules)/
-                })
-            }
-        }
+        ]
     }
 }
