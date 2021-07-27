@@ -9,12 +9,13 @@
                 </p>
             </div>
             <div class="form-group">
-                <button @click="show" class="btn btn-primary">Pretty</button>
+                Deep: <input type="text" v-model="jsonShowDeep" />
             </div>
         </div>
         <p>
             <vue-json-pretty
-                :data="jsonSource">
+                :data="inputJson"
+                :deep="jsonShowDeep">
             </vue-json-pretty>
         </p>
     </div>
@@ -29,6 +30,7 @@ export default {
             input: "{}",
             jsonSource: "{}",
             message: "",
+            jsonShowDeep: 1,
         }
     },
     head () {
@@ -41,6 +43,20 @@ export default {
     },
     components: {
         VueJsonPretty, TextArea
+    },
+    computed: {
+        inputJson() {
+            if (this.input.length == "") {
+                return ""
+            }
+            var json;
+            try {
+                json = JSON.parse(this.input);
+            } catch(e) {
+                return ""
+            }
+            return json
+        }
     },
     methods: {
         show() {
