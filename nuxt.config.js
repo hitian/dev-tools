@@ -5,7 +5,7 @@ module.exports = {
      ** Headers of the page
      */
     head: {
-        title: 'tools-less-run',
+        title: 'dev tools',
         meta: [
             { charset: 'utf-8' },
             { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -13,14 +13,9 @@ module.exports = {
         ],
         link: [
             { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-            { rel: 'stylesheet', href: '/css/bootstrap.min.css' }
         ],
-        script: [
-            { src: '/js/jquery-3.2.1.slim.min.js' },
-            { src: '/js/popper.min.js' },
-            { src: '/js/bootstrap.min.js' }
-        ]
     },
+    modules: ['bootstrap-vue/nuxt'],
     /*
      ** Customize the progress bar color
      */

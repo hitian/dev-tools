@@ -21,6 +21,7 @@
         "@nuxt/content": "^1.14.0",
         "@nuxtjs/axios": "^5.13.6",
         "@nuxtjs/pwa": "^3.3.5",
+        "bootstrap-vue": "^2.21.2",
         "core-js": "^3.15.2",
         "js-base64": "^3.6.0",
         "locutus": "^2.0.9",

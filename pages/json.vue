@@ -4,18 +4,12 @@
         <div class="form">
             <div class="form-group">
                 <text-area v-model="input"></text-area>
-                <p class="help-block alert alert-warning" v-if="message">
-                    {{message}}
-                </p>
-            </div>
-            <div class="form-group">
-                Deep: <input type="text" v-model="jsonShowDeep" />
             </div>
         </div>
+        <b-alert variant="warning" show v-if="errMessage!=''" >{{ errMessage }}</b-alert>
         <p>
             <vue-json-pretty
-                :data="inputJson"
-                :deep="jsonShowDeep">
+                :data="inputJson">
             </vue-json-pretty>
         </p>
     </div>
@@ -29,8 +23,7 @@ export default {
         return {
             input: "{}",
             jsonSource: "{}",
-            message: "",
-            jsonShowDeep: 1,
+            errMessage: "",
         }
     },
     head () {
@@ -53,32 +46,14 @@ export default {
             try {
                 json = JSON.parse(this.input);
             } catch(e) {
+                this.errMessage = e
                 return ""
             }
+            this.errMessage = ""
             return json
         }
     },
     methods: {
-        show() {
-            if (this.input.length == "") {
-                this.showMessage("input empty");
-            }
-            var json;
-            try {
-                json = JSON.parse(this.input);
-            } catch(e) {
-                this.showMessage("json data error.");
-                return
-            }
-            this.input = JSON.stringify(json);
-            this.jsonSource = json;
-        },
-        showMessage(message) {
-            this.message = message;
-            setTimeout(() => {
-                this.message = "";
-            }, 5000);
-        },
         selectAll(event) {
             event.target.select();
         }
