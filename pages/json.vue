@@ -44,6 +44,7 @@ export default {
             }
             var json;
             try {
+                this.input = this.input.replaceAll("\n", "")
                 json = JSON.parse(this.input);
             } catch(e) {
                 this.errMessage = e
