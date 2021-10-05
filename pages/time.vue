@@ -2,13 +2,14 @@
     <div>
         <div class="alert alert-info clearfix">
             <label class="col-form-label">TimeZone: {{current_timezone}}</label>
-            <div class="input-group col-md-4 float-right">
+            <div class="input-group float-right" style="width: 240px">
                 <vue-bootstrap-typeahead 
                     v-model="selected_timezone"
                     :data="timezoneNameList"
                     placeholder="type to search"
                     @hit="selectedTimezone"
                     :maxMatches="maxMatches"
+                    style="width: 150px"
                 />
                 <div class="input-group-append">
                     <button class="btn btn-warning" @click="selectedTimezone" type="button">Change</button>
@@ -21,13 +22,13 @@
                     Now
                 </div>
                 <div class="row">
-                    <div class="input-group col">
+                    <div class="input-group ml-3" style="width: 280px">
                         <div class="input-group-prepend">
                             <span class="input-group-text" style="background-color: #FFDC00;">Unix Timestamp</span>
                         </div>
                         <input type="text" class="form-control" v-model="now" readonly onClick="this.select();" />
                     </div>
-                    <div class="input-group col">
+                    <div class="input-group ml-3" style="width: 280px">
                         <div class="input-group-prepend">
                             <span class="input-group-text" style="background-color: #7FDBFF;">Datetime</span>
                         </div>
@@ -43,17 +44,17 @@
                 <div class="card-title">
                     timestamp to time
                 </div>
-                <div class="form-inline">
-                    <div class="form-group mx-sm-3">
-                        <input v-model="timestamp_value" @keyup.enter="timestampConvert" type="text" placeholder="timestamp" class="form-control" />
-                    </div>
-                    <div class="form-group">
-                        <button @click="timestampConvert" class="form-control btn btn-primary">Convert</button>
-                    </div>
-                    <div class="form-group mx-sm-3">
-                        <button @click="timeStringListClean" class="form-control btn btn-warning">Clean</button>
-                    </div>
-                </div>
+                <b-input-group class="mt-3" style="width: 320px">
+                    <b-form-input 
+                        v-model="timestamp_value" 
+                        @keyup.enter="timestampConvert" 
+                        type="text" 
+                        placeholder="timestamp"></b-form-input>
+                    <b-input-group-append>
+                        <b-button @click="timestampConvert" variant="success">Convert</b-button>
+                        <b-button @click="timeStringListClean" variant="warning">Clean</b-button>
+                    </b-input-group-append>
+                </b-input-group>
                 <div class="mt-2" v-if="time_string_list">
                     <span v-for="(item, index) in time_string_list" :key="index" class="badge badge-success ml-1">
                         {{ item }}
