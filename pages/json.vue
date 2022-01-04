@@ -6,6 +6,7 @@
                 <text-area v-model="input"></text-area>
             </div>
         </div>
+        <b-btn @click="minify">minify</b-btn>
         <b-alert variant="warning" show v-if="errMessage!=''" >{{ errMessage }}</b-alert>
         <p>
             <vue-json-pretty
@@ -57,6 +58,13 @@ export default {
     methods: {
         selectAll(event) {
             event.target.select();
+        },
+        minify() {
+            try {
+                this.input = JSON.stringify(JSON.parse(this.input))
+            } catch (error) {
+                this.errMessage = error
+            }
         }
     }
 }
