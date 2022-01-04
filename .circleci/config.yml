@@ -20,6 +20,8 @@ jobs:
           key: yarn-packages-v1-{{ checksum "yarn.lock" }}
       - run:
           name: build
+          environment:
+            NODE_OPTIONS: --openssl-legacy-provider
           command: yarn run generate
       - add_ssh_keys:
           fingerprints:
