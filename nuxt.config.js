@@ -1,5 +1,10 @@
-module.exports = {
+import { defineNuxtConfig } from '@nuxt/bridge'
+
+export default defineNuxtConfig({
     target: 'static',
+    bridge: {
+        nitro: false
+    },
     ssr: false,
     /*
      ** Headers of the page
@@ -32,4 +37,4 @@ module.exports = {
             'moment-timezone',
         ]
     }
-}
+})
