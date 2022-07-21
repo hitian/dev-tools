@@ -25,7 +25,7 @@
         "core-js": "^3.15.2",
         "js-base64": "^3.6.0",
         "locutus": "^2.0.9",
-        "moment": "^2.29.2",
+        "moment": "^2.29.4",
         "moment-timezone": "^0.5.16",
         "nuxt": "^2.15.7",
         "vue-bootstrap-typeahead": "^0.2.6",
