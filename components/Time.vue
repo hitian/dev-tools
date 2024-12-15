@@ -23,9 +23,16 @@
                 <div class="row">
                     <div class="flex flex-col xs2">
                         <VaInput label="unix timestamp" v-model="now" readonly />
+                        <VaButton color="#3D9209" size="small" class="copy-button" @click="copyToClipboard(now)">
+                            Copy
+                        </VaButton>
                     </div>
                     <div class="flex flex-col xs3 my-ml-10">
                         <VaInput label="datetime" v-model="now_datetime" readonly />
+                        <VaButton color="#3D9209" size="small" class="copy-button"
+                            @click="copyToClipboard(now_datetime)">
+                            Copy
+                        </VaButton>
                     </div>
                 </div>
             </VaCardContent>
@@ -117,6 +124,8 @@ export default {
             selected_timezone: "",
             search_timezone_input: "",
             maxMatches: 1000,
+
+            intervalId: null,
         }
     },
     created() {
@@ -127,6 +136,11 @@ export default {
             this.current_timezone = localStorage.timezone;
         }
         this.refreshNow();
+
+        this.intervalId = setInterval(this.updateTime, 1000);
+    },
+    beforeDestroy() {
+        if (this.intervalId) clearInterval(this.intervalId);
     },
     computed: {
         nowffda() {
@@ -188,7 +202,30 @@ export default {
         },
         onTimezoneSearch(e) {
             this.search_timezone_input = e
-        }
+        },
+        updateTime() {
+            this.refreshNow();
+        },
+        copyToClipboard(text) {
+            if (!navigator.clipboard) {
+                alert("Clipboard API is not supported in this browser.");
+                return;
+            }
+
+            navigator.clipboard.writeText(text).then(
+                () => {
+                    this.$vaToast.success(`Copied: ${text}`, {
+                        duration: 2000,
+                    });
+                },
+                (err) => {
+                    console.error("Failed to copy: ", err);
+                    this.$vaToast.error("Failed to copy. Please try again.", {
+                        duration: 2000,
+                    });
+                }
+            );
+        },
     }
 }
 </script>
@@ -208,5 +245,26 @@ export default {
 
 .my-mt-10 {
     margin-top: 10px;
+}
+
+.my-mt-5 {
+    margin-top: 5px;
+}
+
+.copy-button {
+    font-size: 14px;
+    /* Adjust font size to match inputs */
+    padding: 8px 16px;
+    /* Adjust padding for consistency */
+    height: 40px;
+    /* Match input height */
+    border-radius: 5px;
+    /* Rounded corners */
+    box-shadow: none;
+    /* Remove shadows for flat style */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 5px;
 }
 </style>

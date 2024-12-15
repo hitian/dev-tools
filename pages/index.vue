@@ -34,8 +34,13 @@ export default {
 </script>
 <style>
 .tabs-container {
-    max-width: 720px;
-    margin: 0 auto;
+    width: 100%;
+    height: 100vh;
+    /* Make it fill the window vertically */
+    margin: 0;
+    padding: 10px;
+    box-sizing: border-box;
+    /* Ensure padding doesn't add to width/height */
 }
 
 .tabs-content {
