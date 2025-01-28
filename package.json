@@ -12,12 +12,12 @@
   "dependencies": {
     "@vuestic/nuxt": "^1.0.19",
     "js-base64": "^3.7.7",
-    "moment": "^2.30.1",
+    "moment": "^2.29.4",
     "moment-timezone": "^0.5.45",
     "nuxt": "^3.12.4",
-    "vue": "^3.4.21",
-    "vue-json-pretty": "^2.4.0",
-    "vue-router": "^4.3.0"
+    "vue": "^3.2.37",
+    "vue-json-pretty": "^2.2.0",
+    "vue-router": "^4.1.6"
   },
   "devDependencies": {
     "@nuxtjs/color-mode": "^3.3.3",
