@@ -153,14 +153,37 @@ export default {
 
       return allowed
     },
+    getCrypto() {
+      // Prefer Web Crypto API. In browsers and modern Node (via webcrypto), this exists.
+      if (typeof globalThis !== 'undefined' && globalThis.crypto && globalThis.crypto.getRandomValues) {
+        return globalThis.crypto
+      }
+      this.error = 'Secure random generator is unavailable in this environment.'
+      return null
+    },
+    secureRandomInt(maxExclusive) {
+      if (!Number.isInteger(maxExclusive) || maxExclusive <= 0) {
+        throw new Error('maxExclusive must be a positive integer')
+      }
+      const cryptoApi = this.getCrypto()
+      if (!cryptoApi) throw new Error('Crypto API not available')
+      const buf = new Uint32Array(1)
+      const UINT_MAX = 0x100000000 // 2^32
+      const limit = Math.floor(UINT_MAX / maxExclusive) * maxExclusive
+      while (true) {
+        cryptoApi.getRandomValues(buf)
+        const x = buf[0]
+        if (x < limit) return x % maxExclusive
+      }
+    },
     pickRandom(str) {
       if (!str || str.length === 0) return ''
-      const idx = Math.floor(Math.random() * str.length)
+      const idx = this.secureRandomInt(str.length)
       return str[idx]
     },
     shuffleArray(arr) {
       for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1))
+        const j = this.secureRandomInt(i + 1)
         ;[arr[i], arr[j]] = [arr[j], arr[i]]
       }
       return arr
@@ -224,4 +247,3 @@ export default {
   flex-wrap: wrap;
 }
 </style>
-
