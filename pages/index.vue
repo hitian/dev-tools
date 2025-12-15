@@ -6,6 +6,7 @@
                 <VaTab>Base64</VaTab>
                 <VaTab>JSON</VaTab>
                 <VaTab>URL Encode</VaTab>
+                <VaTab>Password</VaTab>
             </template>
         </VaTabs>
         <div class="tabs-content">
@@ -13,6 +14,7 @@
             <Base64 v-if="activeTab === 1"></Base64>
             <Json v-if="activeTab === 2"></Json>
             <Url v-if="activeTab === 3"></Url>
+            <PasswordGenerator v-if="activeTab === 4"></PasswordGenerator>
         </div>
     </div>
 </template>
@@ -21,6 +23,7 @@ import Time from '~/components/Time.vue'
 import Base64 from '~/components/Base64.vue'
 import Json from '~/components/Json.vue'
 import Url from '~/components/Url.vue'
+import PasswordGenerator from '~/components/PasswordGenerator.vue'
 export default {
     components: {
         Time
