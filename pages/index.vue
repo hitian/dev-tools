@@ -33,7 +33,44 @@ export default {
     },
     data() {
         return {
-            activeTab: 0
+            activeTab: 0,
+            tabKeys: ['time', 'base64', 'json', 'url', 'password', 'qrcode']
+        }
+    },
+    created() {
+        this.setActiveTabFromRoute()
+    },
+    watch: {
+        activeTab(newVal) {
+            this.updateRouteForTab(newVal)
+        },
+        '$route.query.tab'() {
+            this.setActiveTabFromRoute()
+        },
+        '$route.hash'() {
+            this.setActiveTabFromRoute()
+        }
+    },
+    methods: {
+        setActiveTabFromRoute() {
+            const q = this.$route?.query || {}
+            const hashKey = (this.$route?.hash || '').toString().replace(/^#/, '').toLowerCase()
+            const queryKey = (q.tab || '').toString().toLowerCase()
+            const key = this.tabKeys.includes(hashKey) ? hashKey : queryKey
+            const idx = this.tabKeys.indexOf(key)
+            this.activeTab = idx >= 0 ? idx : 0
+        },
+        updateRouteForTab(index) {
+            try {
+                const key = this.tabKeys[index] || this.tabKeys[0]
+                const nextHash = `#${key}`
+                // Avoid pushing duplicate state
+                if (this.$route?.hash !== nextHash) {
+                    this.$router.replace({ hash: nextHash, query: this.$route?.query || {} })
+                }
+            } catch (e) {
+                // no-op on SSR or router absence
+            }
         }
     }
 }
