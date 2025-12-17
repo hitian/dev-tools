@@ -7,6 +7,7 @@
                 <VaTab>JSON</VaTab>
                 <VaTab>URL Encode</VaTab>
                 <VaTab>Password</VaTab>
+                <VaTab>QR Code</VaTab>
             </template>
         </VaTabs>
         <div class="tabs-content">
@@ -15,6 +16,7 @@
             <Json v-if="activeTab === 2"></Json>
             <Url v-if="activeTab === 3"></Url>
             <PasswordGenerator v-if="activeTab === 4"></PasswordGenerator>
+            <QrCode v-if="activeTab === 5"></QrCode>
         </div>
     </div>
 </template>
@@ -24,6 +26,7 @@ import Base64 from '~/components/Base64.vue'
 import Json from '~/components/Json.vue'
 import Url from '~/components/Url.vue'
 import PasswordGenerator from '~/components/PasswordGenerator.vue'
+import QrCode from '~/components/QrCode.vue'
 export default {
     components: {
         Time
