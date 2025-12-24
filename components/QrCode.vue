@@ -100,6 +100,17 @@ export default {
     applyExample(v) {
       this.text = v
     },
+    getQueryText() {
+      const raw = this?.$route?.query?.query
+      const value = Array.isArray(raw) ? raw[0] : raw
+      if (!value) return ''
+      const str = String(value)
+      try {
+        return decodeURIComponent(str.replace(/\+/g, ' '))
+      } catch {
+        return str
+      }
+    },
     updateContainerMetrics() {
       if (typeof window !== 'undefined') {
         this.viewportWidth = window.innerWidth || document.documentElement.clientWidth || 0
@@ -108,6 +119,8 @@ export default {
     }
   },
   mounted() {
+    const queryText = this.getQueryText()
+    if (queryText) this.text = queryText
     this.$nextTick(() => {
       this.updateContainerMetrics()
       if (typeof ResizeObserver !== 'undefined') {
