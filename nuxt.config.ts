@@ -2,19 +2,7 @@
 export default defineNuxtConfig({
   ssr: false,
 
-  modules: [
-    "@vuestic/nuxt",
-  ],
-
   devtools: { enabled: true },
-
-  vuestic: {
-    config: {
-      // Config here
-    },
-
-    css: ["typography", "reset"],
-  },
 
   compatibilityDate: "2024-12-16",
 })

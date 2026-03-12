@@ -32,11 +32,11 @@
           />
         </div>
 
-        <div class="row my-mt-10">
+        <div class="row my-mt-10 checkbox-row">
           <VaCheckbox v-model="useUpper" label="A-Z" />
-          <VaCheckbox class="my-ml-10" v-model="useLower" label="a-z" />
-          <VaCheckbox class="my-ml-10" v-model="useDigits" label="0-9" />
-          <VaCheckbox class="my-ml-10" v-model="useSymbols" label="!@#$%^&*" />
+          <VaCheckbox v-model="useLower" label="a-z" />
+          <VaCheckbox v-model="useDigits" label="0-9" />
+          <VaCheckbox v-model="useSymbols" label="!@#$%^&*" />
         </div>
 
         <div class="row my-mt-10">
@@ -245,5 +245,8 @@ export default {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
+}
+.checkbox-row {
+  gap: 20px;
 }
 </style>
