@@ -7,6 +7,9 @@
                 <VaButton @click="minify">
                     minify
                 </VaButton>
+                <VaButton @click="copyFormatted" class="ml-2">
+                    Format & Copy
+                </VaButton>
             </div>
             <VaAlert color="danger" v-if="errMessage" :description="errMessage" />
             <pre v-if="errSnippet" class="codeframe" v-html="errSnippet"></pre>
@@ -74,7 +77,43 @@ export default {
                 this.errMessage = message
                 this.errSnippet = snippet
                 this.errFrom = fromText
+                this.$vaToast.error("Invalid JSON format", {
+                    duration: 3000,
+                });
             }
+        },
+        copyFormatted() {
+            try {
+                const json = JSON.parse(this.input);
+                const formatted = JSON.stringify(json, null, 2);
+                this.copyToClipboard(formatted);
+            } catch (e) {
+                this.$vaToast.error("Invalid JSON format. Please check the input.", {
+                    duration: 3000,
+                });
+            }
+        },
+        copyToClipboard(text) {
+            if (!navigator.clipboard) {
+                this.$vaToast.error("Clipboard API is not supported in this browser.", {
+                    duration: 3000,
+                });
+                return;
+            }
+
+            navigator.clipboard.writeText(text).then(
+                () => {
+                    this.$vaToast.success("Formatted JSON copied to clipboard!", {
+                        duration: 2000,
+                    });
+                },
+                (err) => {
+                    console.error("Failed to copy: ", err);
+                    this.$vaToast.error("Failed to copy. Please try again.", {
+                        duration: 2000,
+                    });
+                }
+            );
         },
         describeJsonError(err, source) {
             const msg = String(err && err.message ? err.message : err)
