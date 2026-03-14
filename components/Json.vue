@@ -2,7 +2,7 @@
     <VaCard>
         <VaCardTitle>JSON Tree View</VaCardTitle>
         <VaCardContent>
-            <VaTextarea v-model="input" style="width: 100%;" minRows="10" placeholder="input here" autosize />
+            <VaTextarea v-model="input" style="width: 100%;" minRows="10" placeholder="input here" autosize @blur="handleBlur" />
             <div style="margin-top: 10px;text-align: left;">
                 <VaButton @click="minify">
                     minify
@@ -65,6 +65,44 @@ export default {
     methods: {
         selectAll(event) {
             event.target.select();
+        },
+        handleBlur() {
+            let val = this.input.trim();
+            if (!val) return;
+
+            try {
+                // Case 1: Quoted escaped string like "{\"a\": 1}"
+                if (val.startsWith('"') && val.endsWith('"')) {
+                    const unescaped = JSON.parse(val);
+                    // If result is a string, check if it's further valid JSON
+                    if (typeof unescaped === 'string') {
+                        try {
+                            const finalJson = JSON.parse(unescaped);
+                            this.input = JSON.stringify(finalJson, null, 2);
+                            this.$vaToast.info("Unescaped and formatted JSON detected.", { duration: 2000 });
+                            return;
+                        } catch (e) {
+                            // Result was just a string, update it anyway
+                            this.input = unescaped;
+                        }
+                    }
+                }
+
+                // Case 2: Raw escaped JSON like {\"a\": 1} (often from logs)
+                if (val.includes('\\"')) {
+                    // Simple unescape: replace \" with "
+                    const unescapedRaw = val.replace(/\\"/g, '"');
+                    try {
+                        const finalJson = JSON.parse(unescapedRaw);
+                        this.input = JSON.stringify(finalJson, null, 2);
+                        this.$vaToast.info("Detected escaped JSON and formatted it.", { duration: 2000 });
+                    } catch (e) {
+                        // Not valid JSON even after unescaping "
+                    }
+                }
+            } catch (error) {
+                // Ignore errors during automatic unescaping
+            }
         },
         minify() {
             try {
