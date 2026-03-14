@@ -1,5 +1,6 @@
 <template>
     <div class="tabs-container">
+        <div class="version-badge">{{ appVersion }}</div>
         <VaTabs v-model="activeTab">
             <template #tabs>
                 <VaTab>TIME</VaTab>
@@ -32,7 +33,9 @@ export default {
         Time
     },
     data() {
+        const config = useRuntimeConfig();
         return {
+            appVersion: config.public.appVersion || 'debug',
             activeTab: 0,
             tabKeys: ['time', 'base64', 'json', 'url', 'password', 'qrcode']
         }
@@ -89,5 +92,16 @@ export default {
 .tabs-content {
     text-align: left;
     margin-top: 10px;
+}
+
+.version-badge {
+    position: fixed;
+    top: 5px;
+    right: 10px;
+    font-size: 10px;
+    color: #999;
+    z-index: 1000;
+    pointer-events: none;
+    font-family: monospace;
 }
 </style>
