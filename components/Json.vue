@@ -71,37 +71,33 @@ export default {
             if (!val) return;
 
             try {
-                // Case 1: Quoted escaped string like "{\"a\": 1}"
+                // Step 1: Check if it's already valid JSON
+                JSON.parse(val);
+                // If valid, we don't need to unescape it.
+                return;
+            } catch (e) {
+                // Not valid JSON, let's try to unescape it.
+            }
+
+            try {
+                let unescaped = null;
+                // Step 2: Try to get unescaped content
+                // If wrapped in quotes, parse as JSON string
                 if (val.startsWith('"') && val.endsWith('"')) {
-                    const unescaped = JSON.parse(val);
-                    // If result is a string, check if it's further valid JSON
-                    if (typeof unescaped === 'string') {
-                        try {
-                            const finalJson = JSON.parse(unescaped);
-                            this.input = JSON.stringify(finalJson, null, 2);
-                            this.$vaToast.info("Unescaped and formatted JSON detected.", { duration: 2000 });
-                            return;
-                        } catch (e) {
-                            // Result was just a string, update it anyway
-                            this.input = unescaped;
-                        }
-                    }
+                    unescaped = JSON.parse(val);
+                } else {
+                    // Otherwise try to wrap it in quotes and parse
+                    unescaped = JSON.parse('"' + val + '"');
                 }
 
-                // Case 2: Raw escaped JSON like {\"a\": 1} (often from logs)
-                if (val.includes('\\"')) {
-                    // Simple unescape: replace \" with "
-                    const unescapedRaw = val.replace(/\\"/g, '"');
-                    try {
-                        const finalJson = JSON.parse(unescapedRaw);
-                        this.input = JSON.stringify(finalJson, null, 2);
-                        this.$vaToast.info("Detected escaped JSON and formatted it.", { duration: 2000 });
-                    } catch (e) {
-                        // Not valid JSON even after unescaping "
-                    }
+                // Step 3: If the result is a string, check if it's valid JSON
+                if (typeof unescaped === 'string') {
+                    const finalJson = JSON.parse(unescaped);
+                    this.input = JSON.stringify(finalJson, null, 2);
+                    this.$vaToast.info("Detected escaped JSON and formatted it.", { duration: 2000 });
                 }
             } catch (error) {
-                // Ignore errors during automatic unescaping
+                // Not a valid escaped JSON string, do nothing.
             }
         },
         minify() {
