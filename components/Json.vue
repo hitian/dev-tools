@@ -71,9 +71,13 @@ export default {
             if (!val) return;
 
             try {
-                // Step 1: Check if it's already valid JSON
-                JSON.parse(val);
-                // If valid, we don't need to unescape it.
+                // If valid JSON is itself a JSON-encoded string, unescape it.
+                const parsed = JSON.parse(val);
+                if (typeof parsed === 'string') {
+                    const finalJson = JSON.parse(parsed);
+                    this.input = JSON.stringify(finalJson, null, 2);
+                    this.$vaToast.info("Detected escaped JSON and formatted it.", { duration: 2000 });
+                }
                 return;
             } catch (e) {
                 // Not valid JSON, let's try to unescape it.
