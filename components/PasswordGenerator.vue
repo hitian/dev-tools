@@ -1,61 +1,116 @@
 <template>
-  <VaCard>
-    <VaCardTitle>Password Generator</VaCardTitle>
-    <VaCardContent>
-      <div class="controls">
-        <div class="row">
-          <VaInput
-            type="number"
-            label="Length"
-            v-model.number="length"
-            :min="1"
-            :max="256"
-            style="width: 140px"
-          />
-          <VaInput
-            class="my-ml-10"
-            type="number"
-            label="Min digits"
-            v-model.number="minDigits"
-            :min="0"
-            :max="256"
-            style="width: 140px"
-          />
-          <VaInput
-            class="my-ml-10"
-            type="number"
-            label="Min symbols"
-            v-model.number="minSymbols"
-            :min="0"
-            :max="256"
-            style="width: 140px"
-          />
-        </div>
+  <div class="generator-container">
+    <VaCard class="my-mb-20">
+      <VaCardTitle>Password Generator</VaCardTitle>
+      <VaCardContent>
+        <div class="controls">
+          <div class="row">
+            <VaInput
+              type="number"
+              label="Length"
+              v-model.number="length"
+              :min="1"
+              :max="256"
+              style="width: 140px"
+            />
+            <VaInput
+              class="my-ml-10"
+              type="number"
+              label="Min digits"
+              v-model.number="minDigits"
+              :min="0"
+              :max="256"
+              style="width: 140px"
+            />
+            <VaInput
+              class="my-ml-10"
+              type="number"
+              label="Min symbols"
+              v-model.number="minSymbols"
+              :min="0"
+              :max="256"
+              style="width: 140px"
+            />
+          </div>
 
-        <div class="row my-mt-10 checkbox-row">
-          <VaCheckbox v-model="useUpper" label="A-Z" />
-          <VaCheckbox v-model="useLower" label="a-z" />
-          <VaCheckbox v-model="useDigits" label="0-9" />
-          <VaCheckbox v-model="useSymbols" label="!@#$%^&*" />
-        </div>
+          <div class="row my-mt-10 checkbox-row">
+            <VaCheckbox v-model="useUpper" label="A-Z" />
+            <VaCheckbox v-model="useLower" label="a-z" />
+            <VaCheckbox v-model="useDigits" label="0-9" />
+            <VaCheckbox v-model="useSymbols" label="!@#$%^&*" />
+          </div>
 
-        <div class="row my-mt-10">
-          <VaCheckbox v-model="avoidAmbiguous" label="Avoid easily confused characters" />
-        </div>
+          <div class="row my-mt-10">
+            <VaCheckbox v-model="avoidAmbiguous" label="Avoid easily confused characters" />
+          </div>
 
-        <div class="row my-mt-10">
-          <VaButton color="#3D9209" @click="generate">Generate</VaButton>
-          <VaButton class="my-ml-10" color="#3D9209" @click="copy" :disabled="!password">Copy</VaButton>
-        </div>
+          <div class="row my-mt-10">
+            <VaButton color="#3D9209" @click="generate">Generate</VaButton>
+            <VaButton class="my-ml-10" color="#3D9209" @click="copy(password)" :disabled="!password">Copy</VaButton>
+          </div>
 
-        <VaAlert class="my-mt-10" v-if="error" color="danger" :description="error" />
+          <VaAlert class="my-mt-10" v-if="error" color="danger" :description="error" />
 
-        <div class="my-mt-10">
-          <VaInput label="Password" v-model="password" readonly />
+          <div class="my-mt-10">
+            <VaInput label="Password" v-model="password" readonly />
+          </div>
         </div>
-      </div>
-    </VaCardContent>
-  </VaCard>
+      </VaCardContent>
+    </VaCard>
+
+    <VaCard>
+      <VaCardTitle>Username Generator</VaCardTitle>
+      <VaCardContent>
+        <div class="controls">
+          <div class="row">
+            <VaSelect
+              label="Type"
+              v-model="usernameType"
+              :options="['Adjective + Noun', 'Random String']"
+              style="width: 200px"
+            />
+            <VaInput
+              v-if="usernameType === 'Random String'"
+              class="my-ml-10"
+              type="number"
+              label="Length"
+              v-model.number="usernameLength"
+              :min="1"
+              :max="64"
+              style="width: 100px"
+            />
+            <VaInput
+              class="my-ml-10"
+              type="number"
+              label="Append Digits"
+              v-model.number="appendDigitsCount"
+              :min="0"
+              :max="10"
+              style="width: 120px"
+            />
+          </div>
+
+          <div class="row my-mt-10 checkbox-row">
+            <VaSelect
+              label="Case Style"
+              v-model="usernameCase"
+              :options="['lowercase', 'UPPERCASE', 'PascalCase', 'camelCase', 'snake_case', 'kebab-case']"
+              style="width: 200px"
+            />
+          </div>
+
+          <div class="row my-mt-10">
+            <VaButton color="#3D9209" @click="generateUsername">Generate</VaButton>
+            <VaButton class="my-ml-10" color="#3D9209" @click="copy(username)" :disabled="!username">Copy</VaButton>
+          </div>
+
+          <div class="my-mt-10">
+            <VaInput label="Username" v-model="username" readonly />
+          </div>
+        </div>
+      </VaCardContent>
+    </VaCard>
+  </div>
 </template>
 
 <script>
@@ -72,7 +127,24 @@ export default {
       minSymbols: 0,
       avoidAmbiguous: false,
       password: '',
-      error: ''
+      error: '',
+
+      // Username Generator Data
+      username: '',
+      usernameType: 'Adjective + Noun',
+      usernameLength: 10,
+      appendDigitsCount: 2,
+      usernameCase: 'PascalCase',
+      adjectives: [
+        'Swift', 'Brave', 'Clever', 'Happy', 'Silently', 'Bright', 'Golden', 'Mighty', 'Cool', 'Epic',
+        'Fierce', 'Gentle', 'Kind', 'Lucky', 'Noble', 'Quick', 'Rare', 'Silent', 'Strong', 'Wild',
+        'Witty', 'Zesty', 'Amazing', 'Bold', 'Daring', 'Elite', 'Fancy', 'Grand', 'Humble', 'Iron'
+      ],
+      nouns: [
+        'Falcon', 'Tiger', 'Panda', 'Eagle', 'Wolf', 'Lion', 'Bear', 'Shark', 'Dragon', 'Phoenix',
+        'Knight', 'Ninja', 'Wizard', 'Hero', 'Ghost', 'Shadow', 'Storm', 'Thunder', 'River', 'Forest',
+        'Mountain', 'Ocean', 'Star', 'Moon', 'Sun', 'Comet', 'Planet', 'Galaxy', 'Nova', 'Titan'
+      ]
     }
   },
   computed: {
@@ -97,9 +169,9 @@ export default {
     }
   },
   methods: {
-    copy() {
-      if (!this.password) return
-      navigator.clipboard?.writeText(this.password)
+    copy(text) {
+      if (!text) return
+      navigator.clipboard?.writeText(text)
     },
     validate() {
       this.error = ''
@@ -231,12 +303,67 @@ export default {
 
       // Shuffle for randomness
       this.password = this.shuffleArray(result).join('')
+    },
+
+    generateUsername() {
+      let base = ''
+      if (this.usernameType === 'Adjective + Noun') {
+        const adj = this.adjectives[this.secureRandomInt(this.adjectives.length)]
+        const noun = this.nouns[this.secureRandomInt(this.nouns.length)]
+        base = `${adj} ${noun}`
+      } else {
+        const charset = this.lowerSet + this.upperSet + this.digitSet
+        for (let i = 0; i < this.usernameLength; i++) {
+          base += this.pickRandom(charset)
+        }
+      }
+
+      // Add random digits if requested
+      if (this.appendDigitsCount > 0) {
+        let digits = ''
+        for (let i = 0; i < this.appendDigitsCount; i++) {
+          digits += this.pickRandom(this.digitSet)
+        }
+        if (this.usernameType === 'Adjective + Noun') {
+          base += ' ' + digits
+        } else {
+          base += digits
+        }
+      }
+
+      this.username = this.applyCaseStyle(base, this.usernameCase)
+    },
+
+    applyCaseStyle(str, style) {
+      const words = str.split(/\s+/).filter(Boolean)
+      if (words.length === 0) return str
+
+      switch (style) {
+        case 'lowercase':
+          return words.join('').toLowerCase()
+        case 'UPPERCASE':
+          return words.join('').toUpperCase()
+        case 'PascalCase':
+          return words.map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join('')
+        case 'camelCase':
+          return words.map((w, i) => i === 0 ? w.toLowerCase() : w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join('')
+        case 'snake_case':
+          return words.map(w => w.toLowerCase()).join('_')
+        case 'kebab-case':
+          return words.map(w => w.toLowerCase()).join('-')
+        default:
+          return str
+      }
     }
   }
 }
 </script>
 
 <style scoped>
+.generator-container {
+  display: flex;
+  flex-direction: column;
+}
 .controls {
   display: flex;
   flex-direction: column;
@@ -248,5 +375,14 @@ export default {
 }
 .checkbox-row {
   gap: 20px;
+}
+.my-mb-20 {
+  margin-bottom: 20px;
+}
+.my-ml-10 {
+  margin-left: 10px;
+}
+.my-mt-10 {
+  margin-top: 10px;
 }
 </style>
