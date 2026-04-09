@@ -6,7 +6,7 @@
         <VaIcon name="key" size="28px" color="primary" />
       </div>
       <div>
-        <h2 class="text-2xl font-bold text-gray-800">Password &amp; Username Generator</h2>
+        <h2 class="text-2xl font-bold text-gray-800">Password & Username Generator</h2>
         <p class="text-sm text-gray-400 mt-0.5">Generate secure random passwords and creative usernames.</p>
       </div>
     </div>

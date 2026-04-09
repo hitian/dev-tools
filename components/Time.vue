@@ -68,7 +68,7 @@
     <!-- Conversion Tools -->
     <VaCard>
       <VaCardContent>
-        <div class="text-xs font-bold text-primary uppercase tracking-widest mb-4">Timestamp → Date</div>
+        <div class="text-xs font-bold text-primary uppercase tracking-widest mb-4">Timestamp to Date</div>
         <div class="flex gap-3 items-end">
           <VaInput
             v-model="timestamp_value"
