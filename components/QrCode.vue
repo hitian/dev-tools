@@ -1,5 +1,16 @@
 <template>
   <div class="space-y-6">
+    <!-- Tool Header -->
+    <div class="flex items-center gap-4 mb-2">
+      <div class="p-3 bg-primary/10 rounded-2xl">
+        <VaIcon name="qr_code_2" size="28px" color="primary" />
+      </div>
+      <div>
+        <h2 class="text-2xl font-bold text-gray-800">QR Code Generator</h2>
+        <p class="text-sm text-gray-400 mt-0.5">Generate QR codes for URLs, phone numbers, Wi-Fi credentials, and more.</p>
+      </div>
+    </div>
+
     <VaCard>
       <VaCardContent>
         <div class="text-xs font-bold text-primary uppercase tracking-widest mb-4">Content Source</div>
@@ -31,7 +42,10 @@
 
     <VaCard>
       <VaCardContent>
-        <div class="text-xs font-bold text-primary uppercase tracking-widest mb-6">Common Examples</div>
+        <div class="flex items-center gap-2 mb-6">
+          <VaIcon name="tips_and_updates" size="16px" color="primary" />
+          <div class="text-xs font-bold text-primary uppercase tracking-widest">Common Examples</div>
+        </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <div
             v-for="ex in examples"

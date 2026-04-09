@@ -1,39 +1,58 @@
 <template>
   <div class="space-y-6">
+    <!-- Tool Header -->
+    <div class="flex items-center gap-4 mb-2">
+      <div class="p-3 bg-primary/10 rounded-2xl">
+        <VaIcon name="code" size="28px" color="primary" />
+      </div>
+      <div>
+        <h2 class="text-2xl font-bold text-gray-800">Base64 Tool</h2>
+        <p class="text-sm text-gray-400 mt-0.5">Encode plain text to Base64 or decode Base64 back to text.</p>
+      </div>
+    </div>
+
     <VaCard>
       <VaCardContent>
-        <div class="text-xs font-bold text-primary uppercase tracking-widest mb-4">Input Text</div>
-        <VaTextarea
-          v-model="input"
-          placeholder="Paste or type text here..."
-          :min-rows="8"
-          autosize
-          class="w-full font-mono text-sm mb-6"
-        />
-        
-        <div class="flex gap-3 mb-8">
-          <VaButton @click="encode" icon="lock">Encode</VaButton>
-          <VaButton @click="decode" icon="lock_open" preset="secondary">Decode</VaButton>
-          <VaButton @click="clear" preset="secondary" border-color="warning">Clear</VaButton>
-        </div>
-
         <VaAlert v-if="message" color="danger" dense class="mb-6">
           {{ message }}
         </VaAlert>
 
-        <div class="text-xs font-bold text-primary uppercase tracking-widest mb-4">Output Result</div>
-        <div class="relative group">
-          <VaTextarea
-            v-model="output"
-            readonly
-            placeholder="Result will appear here..."
-            :min-rows="8"
-            autosize
-            class="w-full font-mono text-sm bg-gray-50/50"
-          />
-          <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity" v-if="output">
-            <VaButton size="small" preset="secondary" icon="content_copy" @click="copyToClipboard(output)">Copy</VaButton>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Input -->
+          <div class="flex flex-col gap-3">
+            <div class="text-xs font-bold text-primary uppercase tracking-widest">Input Text</div>
+            <VaTextarea
+              v-model="input"
+              placeholder="Paste or type text here..."
+              :min-rows="10"
+              autosize
+              class="w-full font-mono text-sm"
+            />
+            <div class="text-[10px] text-gray-400 text-right">{{ input.length }} chars</div>
           </div>
+
+          <!-- Output -->
+          <div class="flex flex-col gap-3">
+            <div class="flex items-center justify-between">
+              <div class="text-xs font-bold text-primary uppercase tracking-widest">Output Result</div>
+              <VaButton v-if="output" size="small" preset="secondary" icon="content_copy" @click="copyToClipboard(output)">Copy</VaButton>
+            </div>
+            <VaTextarea
+              v-model="output"
+              readonly
+              placeholder="Result will appear here..."
+              :min-rows="10"
+              autosize
+              class="w-full font-mono text-sm output-area"
+            />
+            <div class="text-[10px] text-gray-400 text-right">{{ output.length }} chars</div>
+          </div>
+        </div>
+
+        <div class="flex gap-3 mt-6 pt-4 border-t border-gray-100">
+          <VaButton @click="encode" icon="lock">Encode</VaButton>
+          <VaButton @click="decode" icon="lock_open" preset="secondary">Decode</VaButton>
+          <VaButton @click="clear" preset="secondary" border-color="warning">Clear</VaButton>
         </div>
       </VaCardContent>
     </VaCard>
@@ -99,4 +118,7 @@ export default {
 </script>
 
 <style scoped>
+.output-area :deep(textarea) {
+  background-color: #f8fafc;
+}
 </style>

@@ -153,7 +153,7 @@ body {
 
 /* Vuestic Overrides for Modernity */
 .va-sidebar-item--active {
-  background: rgba(61, 146, 9, 0.1) !important;
+  background: var(--va-primary-element-opacity-hover) !important;
 }
 
 .va-card {

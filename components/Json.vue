@@ -1,5 +1,16 @@
 <template>
   <div class="space-y-6">
+    <!-- Tool Header -->
+    <div class="flex items-center gap-4 mb-2">
+      <div class="p-3 bg-primary/10 rounded-2xl">
+        <VaIcon name="format_align_left" size="28px" color="primary" />
+      </div>
+      <div>
+        <h2 class="text-2xl font-bold text-gray-800">JSON Formatter</h2>
+        <p class="text-sm text-gray-400 mt-0.5">Format, minify, and explore JSON data interactively.</p>
+      </div>
+    </div>
+
     <VaCard>
       <VaCardContent>
         <div class="text-xs font-bold text-primary uppercase tracking-widest mb-4">Input JSON</div>
@@ -30,8 +41,11 @@
         </div>
 
         <div class="mt-8">
-          <div class="text-xs font-bold text-primary uppercase tracking-widest mb-4">Interactive Tree View</div>
-          <div class="p-4 bg-gray-50 rounded-lg border border-gray-100 overflow-auto max-h-[500px]">
+          <div class="flex items-center gap-2 mb-4">
+            <VaIcon name="account_tree" size="16px" color="primary" />
+            <div class="text-xs font-bold text-primary uppercase tracking-widest">Interactive Tree View</div>
+          </div>
+          <div class="p-4 bg-gray-50 rounded-xl border border-gray-100 overflow-auto max-h-[500px]">
             <vue-json-pretty :data="inputJson" :depth="2" :show-length="true" />
           </div>
         </div>

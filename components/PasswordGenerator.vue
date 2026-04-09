@@ -1,9 +1,23 @@
 <template>
   <div class="space-y-6">
+    <!-- Tool Header -->
+    <div class="flex items-center gap-4 mb-2">
+      <div class="p-3 bg-primary/10 rounded-2xl">
+        <VaIcon name="key" size="28px" color="primary" />
+      </div>
+      <div>
+        <h2 class="text-2xl font-bold text-gray-800">Password &amp; Username Generator</h2>
+        <p class="text-sm text-gray-400 mt-0.5">Generate secure random passwords and creative usernames.</p>
+      </div>
+    </div>
+
     <!-- Password Generator -->
     <VaCard>
       <VaCardContent>
-        <div class="text-xs font-bold text-primary uppercase tracking-widest mb-6">Password Generator</div>
+        <div class="flex items-center gap-2 mb-6">
+          <VaIcon name="lock" size="18px" color="primary" />
+          <div class="text-xs font-bold text-primary uppercase tracking-widest">Password Generator</div>
+        </div>
         
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
           <VaInput
@@ -32,7 +46,7 @@
           />
         </div>
 
-        <div class="flex flex-wrap gap-6 mb-6 p-4 bg-gray-50 rounded-lg border border-gray-100 items-center justify-between">
+        <div class="flex flex-wrap gap-6 mb-6 p-4 bg-gray-50 rounded-xl border border-gray-100 items-center justify-between">
           <div class="flex flex-wrap gap-6">
             <VaCheckbox v-model="useUpper" label="A-Z" />
             <VaCheckbox v-model="useLower" label="a-z" />
@@ -42,7 +56,7 @@
           <VaCheckbox v-model="avoidAmbiguous" label="Avoid Ambiguous (0, O, l, 1)" />
         </div>
 
-        <div class="flex gap-3 mb-8">
+        <div class="flex gap-3 mb-6">
           <VaButton @click="generate" icon="refresh">Generate Password</VaButton>
           <VaButton @click="copy(password)" :disabled="!password" preset="secondary" icon="content_copy">Copy</VaButton>
         </div>
@@ -52,8 +66,9 @@
         </VaAlert>
 
         <div v-if="password" class="p-6 bg-primary/5 border border-primary/20 rounded-xl">
-          <div class="text-[10px] font-bold text-primary uppercase tracking-widest mb-2 text-center">Generated Password</div>
-          <div class="text-3xl font-mono font-bold break-all text-gray-800 text-center select-all">{{ password }}</div>
+          <div class="text-[10px] font-bold text-primary uppercase tracking-widest mb-3 text-center">Generated Password</div>
+          <div class="text-3xl font-mono font-bold break-all text-gray-800 text-center select-all leading-relaxed">{{ password }}</div>
+          <div class="text-[10px] text-gray-400 text-center mt-3">{{ password.length }} characters · Click to select all</div>
         </div>
       </VaCardContent>
     </VaCard>
@@ -61,7 +76,10 @@
     <!-- Username Generator -->
     <VaCard>
       <VaCardContent>
-        <div class="text-xs font-bold text-primary uppercase tracking-widest mb-6">Username Generator</div>
+        <div class="flex items-center gap-2 mb-6">
+          <VaIcon name="person" size="18px" color="primary" />
+          <div class="text-xs font-bold text-primary uppercase tracking-widest">Username Generator</div>
+        </div>
         
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <VaSelect
@@ -91,14 +109,15 @@
           />
         </div>
 
-        <div class="flex gap-3 mb-8">
+        <div class="flex gap-3 mb-6">
           <VaButton @click="generateUsername" icon="person_add">Generate Username</VaButton>
           <VaButton @click="copy(username)" :disabled="!username" preset="secondary" icon="content_copy">Copy</VaButton>
         </div>
 
         <div v-if="username" class="p-6 bg-primary/5 border border-primary/20 rounded-xl">
-          <div class="text-[10px] font-bold text-primary uppercase tracking-widest mb-2 text-center">Generated Username</div>
+          <div class="text-[10px] font-bold text-primary uppercase tracking-widest mb-3 text-center">Generated Username</div>
           <div class="text-2xl font-semibold break-all text-gray-800 text-center select-all">{{ username }}</div>
+          <div class="text-[10px] text-gray-400 text-center mt-3">{{ username.length }} characters · Click to select all</div>
         </div>
       </VaCardContent>
     </VaCard>

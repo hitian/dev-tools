@@ -1,5 +1,16 @@
 <template>
   <div class="space-y-6">
+    <!-- Tool Header -->
+    <div class="flex items-center gap-4 mb-2">
+      <div class="p-3 bg-primary/10 rounded-2xl">
+        <VaIcon name="schedule" size="28px" color="primary" />
+      </div>
+      <div>
+        <h2 class="text-2xl font-bold text-gray-800">Time Converter</h2>
+        <p class="text-sm text-gray-400 mt-0.5">Convert timestamps and inspect dates across timezones.</p>
+      </div>
+    </div>
+
     <!-- Timezone Selection -->
     <VaCard>
       <VaCardContent>
@@ -25,23 +36,31 @@
 
     <!-- Current Time Display -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <VaCard>
+      <VaCard class="border-l-4 border-primary">
         <VaCardContent class="flex flex-col gap-4">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-primary uppercase tracking-widest">Unix Timestamp</span>
+            <div class="flex items-center gap-2">
+              <VaIcon name="pin" size="16px" color="primary" />
+              <span class="text-xs font-bold text-primary uppercase tracking-widest">Unix Timestamp</span>
+            </div>
             <VaButton size="small" preset="secondary" icon="content_copy" @click="copyToClipboard(now)">Copy</VaButton>
           </div>
-          <div class="text-3xl font-mono font-bold text-gray-800">{{ now }}</div>
+          <div class="text-4xl font-mono font-bold text-gray-800 tabular-nums">{{ now }}</div>
+          <div class="text-xs text-gray-400">Seconds since 1970-01-01 00:00:00 UTC</div>
         </VaCardContent>
       </VaCard>
 
-      <VaCard>
+      <VaCard class="border-l-4 border-primary/40">
         <VaCardContent class="flex flex-col gap-4">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-primary uppercase tracking-widest">Local DateTime</span>
+            <div class="flex items-center gap-2">
+              <VaIcon name="calendar_today" size="16px" color="primary" />
+              <span class="text-xs font-bold text-primary uppercase tracking-widest">Local DateTime</span>
+            </div>
             <VaButton size="small" preset="secondary" icon="content_copy" @click="copyToClipboard(now_datetime)">Copy</VaButton>
           </div>
-          <div class="text-2xl font-semibold text-gray-800">{{ now_datetime }}</div>
+          <div class="text-2xl font-semibold text-gray-800 font-mono tabular-nums">{{ now_datetime }}</div>
+          <div class="text-xs text-gray-400">In timezone: {{ current_timezone }}</div>
         </VaCardContent>
       </VaCard>
     </div>
@@ -49,7 +68,7 @@
     <!-- Conversion Tools -->
     <VaCard>
       <VaCardContent>
-        <div class="text-xs font-bold text-primary uppercase tracking-widest mb-4">Timestamp to Date</div>
+        <div class="text-xs font-bold text-primary uppercase tracking-widest mb-4">Timestamp → Date</div>
         <div class="flex gap-3 items-end">
           <VaInput
             v-model="timestamp_value"
@@ -85,7 +104,7 @@
         <VaInput v-model="time_string" label="Date String" placeholder="Enter date string..." class="w-full mb-6 font-mono" />
         
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div v-for="item in dateInfoItems" :key="item.label" class="p-3 bg-gray-50 rounded-lg border border-gray-100 flex flex-col justify-center">
+          <div v-for="item in dateInfoItems" :key="item.label" class="p-3 bg-gray-50 rounded-lg border border-gray-100 flex flex-col justify-center hover:bg-white hover:shadow-sm transition-all">
             <div class="text-[10px] text-gray-400 uppercase font-bold mb-1 tracking-wider">{{ item.label }}</div>
             <div class="font-mono text-sm truncate text-gray-700">{{ item.value }}</div>
           </div>
