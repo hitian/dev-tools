@@ -1,76 +1,100 @@
 <template>
+  <div class="space-y-6">
     <VaCard>
-        <VaCardTitle>Base64</VaCardTitle>
-        <VaCardContent>
-            <VaTextarea v-model="input" style="width: 100%;" minRows="10" placeholder="input here" autosize />
-            <div style="margin-top: 10px;text-align: left;">
-                <VaButton @click="decode">
-                    decode
-                </VaButton>
-                <VaButton class="my-ml-10" @click="encode">
-                    encode
-                </VaButton>
-            </div>
-            <VaAlert color="danger" v-if="message" :description="message" />
-            <VaTextarea v-model="output" :readonly="readonly" placeholder="output" class="my-mt-10"
-                style="width: 100%;margin-top: 10px;" minRows="10" autosize />
-        </VaCardContent>
+      <VaCardContent>
+        <div class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Input</div>
+        <VaTextarea
+          v-model="input"
+          placeholder="Paste or type text here..."
+          :min-rows="8"
+          autosize
+          class="w-full font-mono text-sm mb-4"
+        />
+        
+        <div class="flex gap-3 mb-6">
+          <VaButton @click="encode" icon="lock">Encode</VaButton>
+          <VaButton @click="decode" icon="lock_open" preset="secondary">Decode</VaButton>
+          <VaButton @click="clear" preset="secondary" border-color="warning">Clear</VaButton>
+        </div>
 
+        <VaAlert v-if="message" color="danger" dense class="mb-4">
+          {{ message }}
+        </VaAlert>
 
+        <div class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4 mt-8">Output</div>
+        <VaTextarea
+          v-model="output"
+          readonly
+          placeholder="Result will appear here..."
+          :min-rows="8"
+          autosize
+          class="w-full font-mono text-sm"
+        />
+        <div class="mt-4 flex justify-end" v-if="output">
+          <VaButton size="small" preset="secondary" icon="content_copy" @click="copyToClipboard(output)">Copy Output</VaButton>
+        </div>
+      </VaCardContent>
     </VaCard>
+  </div>
 </template>
 
 <script>
 import { Base64 } from 'js-base64';
 
 export default {
-    data() {
-        return {
-            message: "",
-            input: "",
-            output: "",
-        }
-    },
-    methods: {
-        encode() {
-            if (this.input.length == "") {
-                this.showMessage("input empty");
-            }
-            let result = Base64.encode(this.input);
-            if (result.length > 0) {
-                this.output = result;
-            } else {
-                this.showMessage("encode failed.");
-            }
-        },
-        decode() {
-            if (this.input.length == "") {
-                this.showMessage("input empty");
-            }
-            let result = Base64.decode(this.input);
-            if (result.length > 0) {
-                this.output = result;
-            } else {
-                this.showMessage("decode failed.");
-            }
-        },
-        showMessage(message) {
-            this.message = message;
-            setTimeout(() => {
-                this.message = "";
-            }, 5000);
-        }
+  data() {
+    return {
+      message: "",
+      input: "",
+      output: "",
     }
+  },
+  methods: {
+    encode() {
+      if (!this.input) {
+        this.showMessage("Input is empty");
+        return;
+      }
+      try {
+        this.output = Base64.encode(this.input);
+      } catch (e) {
+        this.showMessage("Encode failed: " + e.message);
+      }
+    },
+    decode() {
+      if (!this.input) {
+        this.showMessage("Input is empty");
+        return;
+      }
+      try {
+        this.output = Base64.decode(this.input);
+      } catch (e) {
+        this.showMessage("Decode failed: " + e.message);
+      }
+    },
+    clear() {
+      this.input = "";
+      this.output = "";
+      this.message = "";
+    },
+    copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        this.$vaToast.init({
+          message: 'Copied to clipboard!',
+          color: 'success',
+          duration: 2000
+        });
+      });
+    },
+    showMessage(message) {
+      this.message = message;
+      setTimeout(() => {
+        this.message = "";
+      }, 5000);
+    }
+  }
 }
-
 </script>
 
-<style>
-.my-ml-10 {
-    margin-left: 10px;
-}
-
-.my-mt-10 {
-    margin-top: 10px;
-}
+<style scoped>
 </style>

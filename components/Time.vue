@@ -1,270 +1,196 @@
 <template>
-    <div>
-        <VaCard color="#ECF0F1">
-            <VaCardTitle>TimeZone</VaCardTitle>
-            <VaCardContent>
-                <div class="row">
-                    <div class="flex flex-col xs2 v-center">
-                        <div style="text-align: left;"> {{ current_timezone }}</div>
-                    </div>
-                    <div class="flex flex-col v-center" style="width: 280px;">
-                        <VaSelect v-model="selected_timezone" :options="timezoneNameList" placeholder="type to search"
-                            @hit="selectedTimezone" :search="search_timezone_input" :maxMatches="maxMatches" searchable
-                            style="width: 150px" @update:search="onTimezoneSearch"
-                            @update:modelValue="selectedTimezone" />
-                    </div>
-                </div>
+  <div class="space-y-6">
+    <!-- Timezone Selection -->
+    <VaCard>
+      <VaCardContent>
+        <div class="flex items-center gap-4 flex-wrap">
+          <div class="flex items-center gap-2">
+            <VaIcon name="public" color="primary" />
+            <span class="font-bold text-gray-700">Current Timezone:</span>
+            <VaBadge :text="current_timezone" color="primary" />
+          </div>
+          <VaSelect
+            v-model="selected_timezone"
+            :options="timezoneNameList"
+            placeholder="Change timezone..."
+            searchable
+            @update:modelValue="selectedTimezone"
+            @update:search="onTimezoneSearch"
+            class="min-w-[250px]"
+          />
+        </div>
+      </VaCardContent>
+    </VaCard>
 
-            </VaCardContent>
-        </VaCard>
-        <VaCard class="my-mt-10">
-            <VaCardTitle>Now</VaCardTitle>
-            <VaCardContent>
-                <div class="row">
-                    <div class="flex flex-col xs2">
-                        <VaInput label="unix timestamp" v-model="now" readonly />
-                        <VaButton color="#3D9209" size="small" class="copy-button" @click="copyToClipboard(now)">
-                            Copy
-                        </VaButton>
-                    </div>
-                    <div class="flex flex-col xs3 my-ml-10">
-                        <VaInput label="datetime" v-model="now_datetime" readonly />
-                        <VaButton color="#3D9209" size="small" class="copy-button"
-                            @click="copyToClipboard(now_datetime)">
-                            Copy
-                        </VaButton>
-                    </div>
-                </div>
-            </VaCardContent>
-        </VaCard>
-        <VaCard class="my-mt-10">
-            <VaCardTitle>timestamp to time</VaCardTitle>
-            <VaCardContent>
-                <VaForm ref="myForm" inline immediate hide-error-messages class="flex flex-col gap-2 mb-2">
-                    <VaInput v-model="timestamp_value" placeholder="timestamp" @keyup.enter="timestampConvert" />
-                    <VaButton color="#3D9209" class="my-ml-10" @click="timestampConvert">
-                        Convert
-                    </VaButton>
-                    <VaButton color="#FFD43A" class="my-ml-10" @click="timeStringListClean">
-                        Clean
-                    </VaButton>
-                </VaForm>
-                <p class="my-mt-10">
-                    <VaBadge :text="time" v-if="time_string_list" v-for="time in time_string_list" :key="time"
-                        color="#B3D943" class="my-ml-10" style="--va-badge-font-size: 18px" />
-                </p>
-            </VaCardContent>
-        </VaCard>
-        <VaCard class="my-mt-10">
-            <VaCardTitle>Time Info</VaCardTitle>
-            <VaCardContent>
-                <p>
-                    <VaInput v-model="time_string" placeholder="timestamp" />
-                </p>
-                <table class="va-table">
-                    <thead>
-                        <tr>
-                            <th>type</th>
-                            <th>value</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>datetime string</td>
-                            <td>{{ time_string }}</td>
-                        </tr>
-                        <tr>
-                            <td>isValid</td>
-                            <td>{{ isValid }}</td>
-                        </tr>
-                        <tr>
-                            <td>timestamp</td>
-                            <td>{{ Stimestamp }}</td>
-                        </tr>
-                        <tr>
-                            <td>timestamp(milliseconds)</td>
-                            <td>{{ StimestampMilliseconds }}</td>
-                        </tr>
-                        <tr>
-                            <td>day of year</td>
-                            <td>{{ Sdayofyear }}</td>
-                        </tr>
-                        <tr>
-                            <td>week of year</td>
-                            <td>{{ Sweekofyear }}</td>
-                        </tr>
-                        <tr>
-                            <td>timezone</td>
-                            <td>{{ Stimezone }}</td>
-                        </tr>
+    <!-- Current Time Display -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <VaCard>
+        <VaCardContent class="flex flex-col gap-4">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-semibold text-gray-500 uppercase tracking-wider">Unix Timestamp</span>
+            <VaButton size="small" preset="secondary" icon="content_copy" @click="copyToClipboard(now)">Copy</VaButton>
+          </div>
+          <div class="text-3xl font-mono font-bold text-primary">{{ now }}</div>
+        </VaCardContent>
+      </VaCard>
 
-                    </tbody>
-                </table>
-            </VaCardContent>
-        </VaCard>
+      <VaCard>
+        <VaCardContent class="flex flex-col gap-4">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-semibold text-gray-500 uppercase tracking-wider">Local DateTime</span>
+            <VaButton size="small" preset="secondary" icon="content_copy" @click="copyToClipboard(now_datetime)">Copy</VaButton>
+          </div>
+          <div class="text-2xl font-semibold">{{ now_datetime }}</div>
+        </VaCardContent>
+      </VaCard>
     </div>
+
+    <!-- Conversion Tools -->
+    <VaCard>
+      <VaCardContent>
+        <div class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Timestamp to Date</div>
+        <div class="flex gap-3">
+          <VaInput
+            v-model="timestamp_value"
+            placeholder="Enter timestamp..."
+            class="flex-grow"
+            @keyup.enter="timestampConvert"
+          />
+          <VaButton @click="timestampConvert">Convert</VaButton>
+          <VaButton preset="secondary" border-color="warning" @click="timeStringListClean">Clear Results</VaButton>
+        </div>
+        
+        <div v-if="time_string_list.length > 0" class="mt-6 flex flex-wrap gap-2">
+          <VaBadge
+            v-for="time in time_string_list"
+            :key="time"
+            :text="time"
+            color="success"
+            class="px-3 py-1 text-sm font-mono"
+          />
+        </div>
+      </VaCardContent>
+    </VaCard>
+
+    <!-- Date Details -->
+    <VaCard>
+      <VaCardContent>
+        <div class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Date Inspector</div>
+        <VaInput v-model="time_string" placeholder="Enter date string..." class="w-full mb-6" />
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div v-for="item in dateInfoItems" :key="item.label" class="p-3 bg-gray-50 rounded-lg border border-gray-100">
+            <div class="text-xs text-gray-400 uppercase font-bold mb-1">{{ item.label }}</div>
+            <div class="font-mono text-sm truncate">{{ item.value }}</div>
+          </div>
+        </div>
+      </VaCardContent>
+    </VaCard>
+  </div>
 </template>
 
 <script>
 import moment from 'moment-timezone';
 
 const time_format_string = "YYYY-MM-DD HH:mm:ss ZZ";
-const localStorage = window.localStorage;
 
 export default {
-    data() {
-        return {
-            now: moment().unix(),
-            now_datetime: "",
-            timestamp_value: "",
-            time_string_list: [],
-            time_string: moment().format("YYYY-MM-DD HH:mm:ss.SSS"),
-
-            current_timezone: "",
-            selected_timezone: "",
-            search_timezone_input: "",
-            maxMatches: 1000,
-
-            intervalId: null,
-        }
-    },
-    created() {
-        if (this.current_timezone == "") {
-            if (!localStorage.timezone) {
-                localStorage.timezone = moment.tz.guess();
-            }
-            this.current_timezone = localStorage.timezone;
-        }
-        this.refreshNow();
-
-        this.intervalId = setInterval(this.updateTime, 1000);
-    },
-    beforeDestroy() {
-        if (this.intervalId) clearInterval(this.intervalId);
-    },
-    computed: {
-        nowffda() {
-            return moment().unix();
-        },
-        isValid() {
-            return moment(this.time_string).isValid() ? "Yes" : "No";
-        },
-        theTime() {
-            return moment.tz(this.time_string, this.current_timezone);
-        },
-        Stimestamp() {
-            let time = this.theTime;
-            return time.isValid() ? time.unix() : "-";
-        },
-        StimestampMilliseconds() {
-            let time = this.theTime;
-            return time.isValid() ? time.valueOf() : "-";
-        },
-        Sdayofyear() {
-            let time = this.theTime;
-            return time.isValid() ? time.format("DDDD") : "-";
-        },
-        Sweekofyear() {
-            let time = this.theTime;
-            return time.isValid() ? time.format("w") : "-";
-        },
-        Stimezone() {
-            let time = this.theTime;
-            return time.isValid() ? time.format("ZZ") : "-";
-        },
-
-        timezoneNameList() {
-            return moment.tz.names().filter(zoneName => zoneName.toUpperCase().indexOf(this.search_timezone_input.toUpperCase()) != -1).slice(0, 10);
-        }
-    },
-    methods: {
-        timestampConvert() {
-            let time = moment(this.timestamp_value * 1000).tz(this.current_timezone).format(time_format_string)
-            let list = this.time_string_list;
-            list.unshift(time);
-            this.time_format_string = list;
-        },
-        timeStringListClean() {
-            this.time_string_list = [];
-        },
-        refreshNow() {
-            this.now = moment().unix();
-            this.now_datetime = moment().tz(this.current_timezone).format("YYYY-MM-DD HH:mm:ss");
-        },
-        selectedTimezone() {
-            if (!confirm("change timezone to " + this.selected_timezone + "?")) {
-                return;
-            }
-            this.current_timezone = this.selected_timezone;
-            localStorage.timezone = this.selected_timezone;
-
-            this.refreshNow();
-        },
-        onTimezoneSearch(e) {
-            this.search_timezone_input = e
-        },
-        updateTime() {
-            this.refreshNow();
-        },
-        copyToClipboard(text) {
-            if (!navigator.clipboard) {
-                alert("Clipboard API is not supported in this browser.");
-                return;
-            }
-
-            navigator.clipboard.writeText(text).then(
-                () => {
-                    this.$vaToast.success(`Copied: ${text}`, {
-                        duration: 2000,
-                    });
-                },
-                (err) => {
-                    console.error("Failed to copy: ", err);
-                    this.$vaToast.error("Failed to copy. Please try again.", {
-                        duration: 2000,
-                    });
-                }
-            );
-        },
+  data() {
+    return {
+      now: moment().unix(),
+      now_datetime: "",
+      timestamp_value: "",
+      time_string_list: [],
+      time_string: moment().format("YYYY-MM-DD HH:mm:ss.SSS"),
+      current_timezone: "",
+      selected_timezone: "",
+      search_timezone_input: "",
+      intervalId: null,
     }
+  },
+  created() {
+    if (typeof window !== 'undefined') {
+      const localStorage = window.localStorage;
+      if (!localStorage.timezone) {
+        localStorage.timezone = moment.tz.guess();
+      }
+      this.current_timezone = localStorage.timezone;
+    }
+    this.refreshNow();
+    this.intervalId = setInterval(this.updateTime, 1000);
+  },
+  beforeUnmount() {
+    if (this.intervalId) clearInterval(this.intervalId);
+  },
+  computed: {
+    isValid() {
+      return moment(this.time_string).isValid() ? "Yes" : "No";
+    },
+    theTime() {
+      return moment.tz(this.time_string, this.current_timezone);
+    },
+    dateInfoItems() {
+      const time = this.theTime;
+      const isValid = time.isValid();
+      return [
+        { label: 'Datetime String', value: this.time_string },
+        { label: 'Is Valid', value: isValid ? 'Yes' : 'No' },
+        { label: 'Unix Timestamp', value: isValid ? time.unix() : '-' },
+        { label: 'Milliseconds', value: isValid ? time.valueOf() : '-' },
+        { label: 'Day of Year', value: isValid ? time.format("DDDD") : '-' },
+        { label: 'Week of Year', value: isValid ? time.format("w") : '-' },
+        { label: 'Timezone Offset', value: isValid ? time.format("ZZ") : '-' }
+      ];
+    },
+    timezoneNameList() {
+      return moment.tz.names()
+        .filter(zoneName => zoneName.toUpperCase().includes(this.search_timezone_input.toUpperCase()))
+        .slice(0, 20);
+    }
+  },
+  methods: {
+    timestampConvert() {
+      if (!this.timestamp_value) return;
+      const val = Number(this.timestamp_value);
+      // Heuristic for seconds vs milliseconds
+      const factor = val > 10000000000 ? 1 : 1000;
+      let time = moment(val * factor).tz(this.current_timezone).format(time_format_string)
+      this.time_string_list.unshift(time);
+    },
+    timeStringListClean() {
+      this.time_string_list = [];
+    },
+    refreshNow() {
+      this.now = moment().unix();
+      this.now_datetime = moment().tz(this.current_timezone).format("YYYY-MM-DD HH:mm:ss");
+    },
+    selectedTimezone(val) {
+      if (!val) return;
+      this.current_timezone = val;
+      if (typeof window !== 'undefined') {
+        window.localStorage.timezone = val;
+      }
+      this.refreshNow();
+    },
+    onTimezoneSearch(e) {
+      this.search_timezone_input = e
+    },
+    updateTime() {
+      this.refreshNow();
+    },
+    copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        this.$vaToast.init({
+          message: 'Copied to clipboard!',
+          color: 'success',
+          duration: 2000
+        });
+      });
+    }
+  }
 }
 </script>
 
 <style scoped>
-@import "vuestic-ui/styles/grid";
-
-.v-center {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.my-ml-10 {
-    margin-left: 10px;
-}
-
-.my-mt-10 {
-    margin-top: 10px;
-}
-
-.my-mt-5 {
-    margin-top: 5px;
-}
-
-.copy-button {
-    font-size: 14px;
-    /* Adjust font size to match inputs */
-    padding: 8px 16px;
-    /* Adjust padding for consistency */
-    height: 40px;
-    /* Match input height */
-    border-radius: 5px;
-    /* Rounded corners */
-    box-shadow: none;
-    /* Remove shadows for flat style */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 5px;
-}
+/* No more local margin classes needed, using Tailwind space-y-6 */
 </style>

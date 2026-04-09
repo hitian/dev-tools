@@ -1,26 +1,64 @@
 <template>
-    <div class="tabs-container">
-        <div class="version-badge">{{ appVersion }}</div>
-        <VaTabs v-model="activeTab">
-            <template #tabs>
-                <VaTab>TIME</VaTab>
-                <VaTab>Base64</VaTab>
-                <VaTab>JSON</VaTab>
-                <VaTab>URL Encode</VaTab>
-                <VaTab>Password</VaTab>
-                <VaTab>QR Code</VaTab>
-            </template>
-        </VaTabs>
-        <div class="tabs-content">
+  <VaLayout
+    :top="{ fixed: true, order: 2 }"
+    :left="{ fixed: true, order: 1, minimized: isSidebarMinimized, width: '280px' }"
+  >
+    <template #top>
+      <VaNavbar color="primary" class="py-2 px-4 shadow-md">
+        <template #left>
+          <VaButton
+            :icon="isSidebarMinimized ? 'menu' : 'menu_open'"
+            preset="plain"
+            color="backgroundPrimary"
+            @click="isSidebarMinimized = !isSidebarMinimized"
+          />
+          <VaNavbarItem class="font-bold text-xl ml-4 text-white">
+            DEV TOOLS
+          </VaNavbarItem>
+        </template>
+        <template #right>
+          <div class="version-badge-navbar">{{ appVersion }}</div>
+        </template>
+      </VaNavbar>
+    </template>
+
+    <template #left>
+      <VaSidebar v-model="isSidebarMinimized" class="modern-sidebar">
+        <VaSidebarItem
+          v-for="(tab, index) in tabKeys"
+          :key="tab"
+          :active="activeTab === index"
+          @click="activeTab = index"
+          active-color="primary"
+          class="my-1 mx-2 rounded-lg"
+        >
+          <VaSidebarItemContent>
+            <VaIcon :name="tabIcons[index]" class="mr-3" />
+            <VaSidebarItemTitle class="uppercase font-semibold tracking-wider text-xs">
+              {{ tabLabels[index] }}
+            </VaSidebarItemTitle>
+          </VaSidebarItemContent>
+        </VaSidebarItem>
+      </VaSidebar>
+    </template>
+
+    <template #content>
+      <div class="p-6 bg-slate-50 min-h-screen">
+        <transition name="fade-slide" mode="out-in">
+          <div :key="activeTab">
             <Time v-if="activeTab === 0"></Time>
             <Base64 v-if="activeTab === 1"></Base64>
             <Json v-if="activeTab === 2"></Json>
             <Url v-if="activeTab === 3"></Url>
             <PasswordGenerator v-if="activeTab === 4"></PasswordGenerator>
             <QrCode v-if="activeTab === 5"></QrCode>
-        </div>
-    </div>
+          </div>
+        </transition>
+      </div>
+    </template>
+  </VaLayout>
 </template>
+
 <script>
 import Time from '~/components/Time.vue'
 import Base64 from '~/components/Base64.vue'
@@ -28,80 +66,102 @@ import Json from '~/components/Json.vue'
 import Url from '~/components/Url.vue'
 import PasswordGenerator from '~/components/PasswordGenerator.vue'
 import QrCode from '~/components/QrCode.vue'
+
 export default {
-    components: {
-        Time
-    },
-    data() {
-        const config = useRuntimeConfig();
-        return {
-            appVersion: config.public.appVersion || 'debug',
-            activeTab: 0,
-            tabKeys: ['time', 'base64', 'json', 'url', 'password', 'qrcode']
-        }
-    },
-    created() {
-        this.setActiveTabFromRoute()
-    },
-    watch: {
-        activeTab(newVal) {
-            this.updateRouteForTab(newVal)
-        },
-        '$route.query.tab'() {
-            this.setActiveTabFromRoute()
-        },
-        '$route.hash'() {
-            this.setActiveTabFromRoute()
-        }
-    },
-    methods: {
-        setActiveTabFromRoute() {
-            const q = this.$route?.query || {}
-            const hashKey = (this.$route?.hash || '').toString().replace(/^#/, '').toLowerCase()
-            const queryKey = (q.tab || '').toString().toLowerCase()
-            const key = this.tabKeys.includes(hashKey) ? hashKey : queryKey
-            const idx = this.tabKeys.indexOf(key)
-            this.activeTab = idx >= 0 ? idx : 0
-        },
-        updateRouteForTab(index) {
-            try {
-                const key = this.tabKeys[index] || this.tabKeys[0]
-                const nextHash = `#${key}`
-                // Avoid pushing duplicate state
-                if (this.$route?.hash !== nextHash) {
-                    this.$router.replace({ hash: nextHash, query: this.$route?.query || {} })
-                }
-            } catch (e) {
-                // no-op on SSR or router absence
-            }
-        }
+  components: {
+    Time, Base64, Json, Url, PasswordGenerator, QrCode
+  },
+  data() {
+    const config = useRuntimeConfig();
+    return {
+      appVersion: config.public.appVersion || 'debug',
+      activeTab: 0,
+      isSidebarMinimized: false,
+      tabKeys: ['time', 'base64', 'json', 'url', 'password', 'qrcode'],
+      tabLabels: ['Time Converter', 'Base64 Tool', 'JSON Formatter', 'URL Encoder', 'Password & User', 'QR Generator'],
+      tabIcons: ['schedule', 'code', 'format_align_left', 'link', 'key', 'qr_code_2']
     }
+  },
+  created() {
+    this.setActiveTabFromRoute()
+  },
+  watch: {
+    activeTab(newVal) {
+      this.updateRouteForTab(newVal)
+    },
+    '$route.query.tab'() {
+      this.setActiveTabFromRoute()
+    },
+    '$route.hash'() {
+      this.setActiveTabFromRoute()
+    }
+  },
+  methods: {
+    setActiveTabFromRoute() {
+      const q = this.$route?.query || {}
+      const hashKey = (this.$route?.hash || '').toString().replace(/^#/, '').toLowerCase()
+      const queryKey = (q.tab || '').toString().toLowerCase()
+      const key = this.tabKeys.includes(hashKey) ? hashKey : queryKey
+      const idx = this.tabKeys.indexOf(key)
+      this.activeTab = idx >= 0 ? idx : 0
+    },
+    updateRouteForTab(index) {
+      try {
+        const key = this.tabKeys[index] || this.tabKeys[0]
+        const nextHash = `#${key}`
+        if (this.$route?.hash !== nextHash) {
+          this.$router.replace({ hash: nextHash, query: this.$route?.query || {} })
+        }
+      } catch (e) {}
+    }
+  }
 }
 </script>
+
 <style>
-.tabs-container {
-    width: 100%;
-    height: 100vh;
-    /* Make it fill the window vertically */
-    margin: 0;
-    padding: 10px;
-    box-sizing: border-box;
-    /* Ensure padding doesn't add to width/height */
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background-color: #f8fafc;
 }
 
-.tabs-content {
-    text-align: left;
-    margin-top: 10px;
+.modern-sidebar {
+  border-right: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-.version-badge {
-    position: fixed;
-    top: 5px;
-    right: 10px;
-    font-size: 10px;
-    color: #999;
-    z-index: 1000;
-    pointer-events: none;
-    font-family: monospace;
+.version-badge-navbar {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: monospace;
+}
+
+/* Transitions */
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition: all 0.3s ease;
+}
+
+.fade-slide-enter-from {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+/* Vuestic Overrides for Modernity */
+.va-sidebar-item--active {
+  background: rgba(61, 146, 9, 0.1) !important;
+}
+
+.va-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.va-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
 }
 </style>

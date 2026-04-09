@@ -1,32 +1,49 @@
 <template>
-  <div class="qrcode-page">
+  <div class="space-y-6">
     <VaCard>
-      <VaCardTitle>QR Code Generator</VaCardTitle>
       <VaCardContent>
-        <VaTextarea v-model="text" style="width: 100%" minRows="4" autosize
-          placeholder="Type text, URL, phone, or formatted content (e.g., tel:+1234567890)" />
+        <div class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Content</div>
+        <VaTextarea
+          v-model="text"
+          placeholder="Type text, URL, phone, or formatted content (e.g., tel:+1234567890)"
+          :min-rows="4"
+          autosize
+          class="w-full font-mono text-sm mb-4"
+        />
 
-        
+        <VaAlert v-if="error" color="danger" dense class="mb-4">
+          {{ error }}
+        </VaAlert>
 
-
-
-        <VaAlert class="my-mt-10" color="danger" v-if="error" :description="error" />
-
-        <div class="my-mt-10">
-          <div v-if="text && svg" class="qr-preview" ref="previewContainer" v-html="svg"></div>
-          <div v-else class="muted">Enter content to preview QR code.</div>
+        <div v-if="text && svg" class="mt-8 flex flex-col items-center">
+          <div class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6">QR Code Preview</div>
+          <div class="p-6 bg-white rounded-2xl shadow-sm border border-gray-100 preview-container" ref="previewContainer" v-html="svg"></div>
+          <div class="mt-6">
+            <VaButton size="small" preset="secondary" icon="download" @click="downloadSVG">Download SVG</VaButton>
+          </div>
+        </div>
+        <div v-else class="mt-8 py-12 text-center bg-gray-50 rounded-xl border border-dashed border-gray-200 text-gray-400">
+          <VaIcon name="qr_code_2" size="large" class="mb-2 opacity-20" />
+          <p>Enter content to generate preview</p>
         </div>
       </VaCardContent>
     </VaCard>
 
-    <VaCard class="my-mt-10">
-      <VaCardTitle>Examples</VaCardTitle>
+    <VaCard>
       <VaCardContent>
-        <div class="examples">
-          <div class="example-row" v-for="ex in examples" :key="ex.label">
-            <VaButton size="small" @click="applyExample(ex.value)">Use</VaButton>
-            <div class="example-label">{{ ex.label }}</div>
-            <div class="example-value">{{ ex.value }}</div>
+        <div class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-6">Common Examples</div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div
+            v-for="ex in examples"
+            :key="ex.label"
+            class="p-3 rounded-lg border border-gray-100 bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer flex items-center justify-between group"
+            @click="applyExample(ex.value)"
+          >
+            <div class="min-w-0 flex-1">
+              <div class="text-xs font-bold text-primary uppercase tracking-wider">{{ ex.label }}</div>
+              <div class="text-sm text-gray-600 truncate">{{ ex.value }}</div>
+            </div>
+            <VaButton size="small" preset="plain" icon="arrow_forward" class="opacity-0 group-hover:opacity-100 transition-opacity" />
           </div>
         </div>
       </VaCardContent>
@@ -43,11 +60,9 @@ export default {
     return {
       text: '',
       error: '',
-      containerWidth: 0,
-      containerHeight: 0,
-      ro: null,
       viewportWidth: 0,
-      viewportHeight: 0
+      viewportHeight: 0,
+      ro: null
     }
   },
   computed: {
@@ -56,29 +71,19 @@ export default {
       try {
         this.error = ''
         const qr = encode(this.text)
-
         if (typeof window === 'undefined') {
           return renderSVG(this.text, { pixelSize: 8 })
         }
-
-        // Get viewport dimensions
         const vw = this.viewportWidth || window.innerWidth || 0
         const vh = this.viewportHeight || window.innerHeight || 0
-
-        // Calculate available space with padding
-        const availableW = Math.max(50, vw - 60)
-        const availableH = Math.max(50, vh - 400)
-
-        // Use the shorter side as the target QR code size
-        const targetSize = Math.min(availableW, availableH)
-
-        // Calculate pixel size based on QR matrix dimensions
+        const availableW = Math.max(50, vw - 120)
+        const availableH = Math.max(50, vh - 500)
+        const targetSize = Math.min(availableW, availableH, 400)
         let px = 8
         if (qr?.size && targetSize > 0) {
           px = Math.floor(targetSize / qr.size)
         }
         px = Math.max(2, px)
-
         return renderSVG(this.text, { pixelSize: px })
       } catch (e) {
         this.error = String(e?.message || e)
@@ -100,16 +105,17 @@ export default {
     applyExample(v) {
       this.text = v
     },
-    getQueryText() {
-      const raw = this?.$route?.query?.query
-      const value = Array.isArray(raw) ? raw[0] : raw
-      if (!value) return ''
-      const str = String(value)
-      try {
-        return decodeURIComponent(str.replace(/\+/g, ' '))
-      } catch {
-        return str
-      }
+    downloadSVG() {
+      if (!this.svg) return
+      const blob = new Blob([this.svg], { type: 'image/svg+xml' })
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `qrcode-${Date.now()}.svg`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      URL.revokeObjectURL(url)
     },
     updateContainerMetrics() {
       if (typeof window !== 'undefined') {
@@ -119,88 +125,26 @@ export default {
     }
   },
   mounted() {
-    const queryText = this.getQueryText()
-    if (queryText) this.text = queryText
     this.$nextTick(() => {
       this.updateContainerMetrics()
       if (typeof ResizeObserver !== 'undefined') {
-        this.ro = new ResizeObserver(() => {
-          this.updateContainerMetrics()
-        })
-        const el = this.$refs.previewContainer
-        if (el) this.ro.observe(el)
-      } else if (typeof window !== 'undefined') {
-        window.addEventListener('resize', this.updateContainerMetrics)
+        this.ro = new ResizeObserver(() => this.updateContainerMetrics())
+        if (this.$refs.previewContainer) this.ro.observe(this.$refs.previewContainer)
       }
+      window.addEventListener('resize', this.updateContainerMetrics)
     })
   },
   beforeUnmount() {
-    if (this.ro && this.$refs.previewContainer) {
-      try { this.ro.unobserve(this.$refs.previewContainer) } catch { }
-      try { this.ro.disconnect() } catch { }
-    }
-    if (typeof window !== 'undefined') {
-      window.removeEventListener('resize', this.updateContainerMetrics)
-    }
+    if (this.ro) this.ro.disconnect()
+    window.removeEventListener('resize', this.updateContainerMetrics)
   }
 }
 </script>
 
 <style scoped>
-.qrcode-page {
-  padding: 10px;
-}
-
-.row {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.qr-preview {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  max-width: 640px;
-  max-height: 640px;
-  margin: 20px auto;
-  overflow: hidden;
-}
-
-.qr-preview svg {
-  width: 100%;
-  height: 100%;
+.preview-container :deep(svg) {
   display: block;
-}
-
-.muted {
-  color: #8a8a8a;
-  text-align: center;
-  padding: 20px;
-}
-
-.examples {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.example-row {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.example-label {
-  min-width: 90px;
-  font-weight: 600;
-}
-
-.example-value {
-  word-break: break-all;
-  flex: 1;
+  max-width: 100%;
+  height: auto;
 }
 </style>
