@@ -3,10 +3,11 @@
     <!-- Timezone Selection -->
     <VaCard>
       <VaCardContent>
+        <div class="text-xs font-bold text-primary uppercase tracking-widest mb-4">Timezone Settings</div>
         <div class="flex items-center gap-4 flex-wrap">
           <div class="flex items-center gap-2">
             <VaIcon name="public" color="primary" />
-            <span class="font-bold text-gray-700">Current Timezone:</span>
+            <span class="font-semibold text-gray-700">Current Timezone:</span>
             <VaBadge :text="current_timezone" color="primary" />
           </div>
           <VaSelect
@@ -27,20 +28,20 @@
       <VaCard>
         <VaCardContent class="flex flex-col gap-4">
           <div class="flex items-center justify-between">
-            <span class="text-sm font-semibold text-gray-500 uppercase tracking-wider">Unix Timestamp</span>
+            <span class="text-xs font-bold text-primary uppercase tracking-widest">Unix Timestamp</span>
             <VaButton size="small" preset="secondary" icon="content_copy" @click="copyToClipboard(now)">Copy</VaButton>
           </div>
-          <div class="text-3xl font-mono font-bold text-primary">{{ now }}</div>
+          <div class="text-3xl font-mono font-bold text-gray-800">{{ now }}</div>
         </VaCardContent>
       </VaCard>
 
       <VaCard>
         <VaCardContent class="flex flex-col gap-4">
           <div class="flex items-center justify-between">
-            <span class="text-sm font-semibold text-gray-500 uppercase tracking-wider">Local DateTime</span>
+            <span class="text-xs font-bold text-primary uppercase tracking-widest">Local DateTime</span>
             <VaButton size="small" preset="secondary" icon="content_copy" @click="copyToClipboard(now_datetime)">Copy</VaButton>
           </div>
-          <div class="text-2xl font-semibold">{{ now_datetime }}</div>
+          <div class="text-2xl font-semibold text-gray-800">{{ now_datetime }}</div>
         </VaCardContent>
       </VaCard>
     </div>
@@ -48,26 +49,31 @@
     <!-- Conversion Tools -->
     <VaCard>
       <VaCardContent>
-        <div class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Timestamp to Date</div>
-        <div class="flex gap-3">
+        <div class="text-xs font-bold text-primary uppercase tracking-widest mb-4">Timestamp to Date</div>
+        <div class="flex gap-3 items-end">
           <VaInput
             v-model="timestamp_value"
+            label="Unix Timestamp"
             placeholder="Enter timestamp..."
-            class="flex-grow"
+            class="flex-grow font-mono"
             @keyup.enter="timestampConvert"
           />
-          <VaButton @click="timestampConvert">Convert</VaButton>
-          <VaButton preset="secondary" border-color="warning" @click="timeStringListClean">Clear Results</VaButton>
+          <VaButton @click="timestampConvert" class="h-[36px]">Convert</VaButton>
+          <VaButton preset="secondary" border-color="warning" @click="timeStringListClean" class="h-[36px]">Clear</VaButton>
         </div>
         
-        <div v-if="time_string_list.length > 0" class="mt-6 flex flex-wrap gap-2">
-          <VaBadge
-            v-for="time in time_string_list"
-            :key="time"
-            :text="time"
-            color="success"
-            class="px-3 py-1 text-sm font-mono"
-          />
+        <div v-if="time_string_list.length > 0" class="mt-6">
+          <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Recent Results</div>
+          <div class="flex flex-wrap gap-2">
+            <VaBadge
+              v-for="time in time_string_list"
+              :key="time"
+              :text="time"
+              color="backgroundPrimary"
+              text-color="primary"
+              class="px-3 py-1 text-sm font-mono border border-primary/20"
+            />
+          </div>
         </div>
       </VaCardContent>
     </VaCard>
@@ -75,13 +81,13 @@
     <!-- Date Details -->
     <VaCard>
       <VaCardContent>
-        <div class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Date Inspector</div>
-        <VaInput v-model="time_string" placeholder="Enter date string..." class="w-full mb-6" />
+        <div class="text-xs font-bold text-primary uppercase tracking-widest mb-4">Date Inspector</div>
+        <VaInput v-model="time_string" label="Date String" placeholder="Enter date string..." class="w-full mb-6 font-mono" />
         
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div v-for="item in dateInfoItems" :key="item.label" class="p-3 bg-gray-50 rounded-lg border border-gray-100">
-            <div class="text-xs text-gray-400 uppercase font-bold mb-1">{{ item.label }}</div>
-            <div class="font-mono text-sm truncate">{{ item.value }}</div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div v-for="item in dateInfoItems" :key="item.label" class="p-3 bg-gray-50 rounded-lg border border-gray-100 flex flex-col justify-center">
+            <div class="text-[10px] text-gray-400 uppercase font-bold mb-1 tracking-wider">{{ item.label }}</div>
+            <div class="font-mono text-sm truncate text-gray-700">{{ item.value }}</div>
           </div>
         </div>
       </VaCardContent>

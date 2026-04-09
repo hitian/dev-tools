@@ -3,55 +3,57 @@
     <!-- Password Generator -->
     <VaCard>
       <VaCardContent>
-        <div class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-6">Password Generator</div>
+        <div class="text-xs font-bold text-primary uppercase tracking-widest mb-6">Password Generator</div>
         
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
           <VaInput
             type="number"
-            label="Length"
+            label="Total Length"
             v-model.number="length"
             :min="1"
             :max="256"
+            class="font-mono"
           />
           <VaInput
             type="number"
-            label="Min digits"
+            label="Min Digits"
             v-model.number="minDigits"
             :min="0"
             :max="256"
+            class="font-mono"
           />
           <VaInput
             type="number"
-            label="Min symbols"
+            label="Min Symbols"
             v-model.number="minSymbols"
             :min="0"
             :max="256"
+            class="font-mono"
           />
         </div>
 
-        <div class="flex flex-wrap gap-6 mb-4 p-4 bg-gray-50 rounded-lg border border-gray-100">
-          <VaCheckbox v-model="useUpper" label="A-Z" />
-          <VaCheckbox v-model="useLower" label="a-z" />
-          <VaCheckbox v-model="useDigits" label="0-9" />
-          <VaCheckbox v-model="useSymbols" label="!@#$%^&*" />
+        <div class="flex flex-wrap gap-6 mb-6 p-4 bg-gray-50 rounded-lg border border-gray-100 items-center justify-between">
+          <div class="flex flex-wrap gap-6">
+            <VaCheckbox v-model="useUpper" label="A-Z" />
+            <VaCheckbox v-model="useLower" label="a-z" />
+            <VaCheckbox v-model="useDigits" label="0-9" />
+            <VaCheckbox v-model="useSymbols" label="!@#$%^&*" />
+          </div>
+          <VaCheckbox v-model="avoidAmbiguous" label="Avoid Ambiguous (0, O, l, 1)" />
         </div>
 
-        <div class="mb-6">
-          <VaCheckbox v-model="avoidAmbiguous" label="Avoid easily confused characters (e.g., 0, O, l, 1)" />
-        </div>
-
-        <div class="flex gap-3 mb-6">
-          <VaButton @click="generate" icon="refresh">Generate</VaButton>
+        <div class="flex gap-3 mb-8">
+          <VaButton @click="generate" icon="refresh">Generate Password</VaButton>
           <VaButton @click="copy(password)" :disabled="!password" preset="secondary" icon="content_copy">Copy</VaButton>
         </div>
 
-        <VaAlert v-if="error" color="danger" dense class="mb-4">
+        <VaAlert v-if="error" color="danger" dense class="mb-6">
           {{ error }}
         </VaAlert>
 
-        <div v-if="password" class="p-4 bg-primary/5 border border-primary/20 rounded-lg">
-          <div class="text-xs font-bold text-primary uppercase tracking-widest mb-2">Generated Password</div>
-          <div class="text-2xl font-mono font-bold break-all text-gray-800">{{ password }}</div>
+        <div v-if="password" class="p-6 bg-primary/5 border border-primary/20 rounded-xl">
+          <div class="text-[10px] font-bold text-primary uppercase tracking-widest mb-2 text-center">Generated Password</div>
+          <div class="text-3xl font-mono font-bold break-all text-gray-800 text-center select-all">{{ password }}</div>
         </div>
       </VaCardContent>
     </VaCard>
@@ -59,11 +61,11 @@
     <!-- Username Generator -->
     <VaCard>
       <VaCardContent>
-        <div class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-6">Username Generator</div>
+        <div class="text-xs font-bold text-primary uppercase tracking-widest mb-6">Username Generator</div>
         
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <VaSelect
-            label="Style"
+            label="Style Pattern"
             v-model="usernameType"
             :options="['Adjective + Noun', 'Random String']"
           />
@@ -89,14 +91,14 @@
           />
         </div>
 
-        <div class="flex gap-3 mb-6">
-          <VaButton @click="generateUsername" icon="person_add">Generate</VaButton>
+        <div class="flex gap-3 mb-8">
+          <VaButton @click="generateUsername" icon="person_add">Generate Username</VaButton>
           <VaButton @click="copy(username)" :disabled="!username" preset="secondary" icon="content_copy">Copy</VaButton>
         </div>
 
-        <div v-if="username" class="p-4 bg-primary/5 border border-primary/20 rounded-lg">
-          <div class="text-xs font-bold text-primary uppercase tracking-widest mb-2">Generated Username</div>
-          <div class="text-xl font-semibold break-all text-gray-800">{{ username }}</div>
+        <div v-if="username" class="p-6 bg-primary/5 border border-primary/20 rounded-xl">
+          <div class="text-[10px] font-bold text-primary uppercase tracking-widest mb-2 text-center">Generated Username</div>
+          <div class="text-2xl font-semibold break-all text-gray-800 text-center select-all">{{ username }}</div>
         </div>
       </VaCardContent>
     </VaCard>

@@ -2,34 +2,36 @@
   <div class="space-y-6">
     <VaCard>
       <VaCardContent>
-        <div class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Input JSON</div>
+        <div class="text-xs font-bold text-primary uppercase tracking-widest mb-4">Input JSON</div>
         <VaTextarea
           v-model="input"
           placeholder="Paste or type JSON here..."
           :min-rows="8"
           autosize
           @blur="handleBlur"
-          class="w-full font-mono text-sm mb-4"
+          class="w-full font-mono text-sm mb-6"
         />
         
-        <div class="flex gap-3 mb-6">
+        <div class="flex gap-3 mb-8">
           <VaButton @click="copyFormatted" icon="format_align_left">Format & Copy</VaButton>
           <VaButton @click="minify" preset="secondary" icon="compress">Minify</VaButton>
           <VaButton @click="clear" preset="secondary" border-color="warning">Clear</VaButton>
         </div>
 
-        <div v-if="errMessage" class="space-y-4">
+        <div v-if="errMessage" class="space-y-4 mb-8">
           <VaAlert color="danger" :description="errMessage" dense />
-          <pre v-if="errSnippet" class="codeframe" v-html="errSnippet"></pre>
+          <div class="p-3 bg-red-50 border border-red-100 rounded-lg overflow-auto">
+            <pre class="text-xs font-mono text-red-800 whitespace-pre-wrap" v-html="errSnippet"></pre>
+          </div>
           <div v-if="errFrom" class="from-block">
-            <div class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">Starting at error:</div>
-            <pre class="codeframe text-xs">{{ errFrom }}</pre>
+            <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Starting at error:</div>
+            <pre class="p-3 bg-gray-50 border border-gray-100 rounded-lg text-xs font-mono text-gray-600 overflow-auto">{{ errFrom }}</pre>
           </div>
         </div>
 
         <div class="mt-8">
-          <div class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Interactive Tree View</div>
-          <div class="p-4 bg-gray-50 rounded-lg border border-gray-100 overflow-auto">
+          <div class="text-xs font-bold text-primary uppercase tracking-widest mb-4">Interactive Tree View</div>
+          <div class="p-4 bg-gray-50 rounded-lg border border-gray-100 overflow-auto max-h-[500px]">
             <vue-json-pretty :data="inputJson" :depth="2" :show-length="true" />
           </div>
         </div>

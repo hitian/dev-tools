@@ -33,6 +33,10 @@ export default defineNuxtPlugin((nuxtApp) => {
           bordered: false,
           borderRadius: 'md',
         },
+        VaTextarea: {
+          bordered: false,
+          borderRadius: 'md',
+        },
         VaCheckbox: {
           color: 'primary',
         },

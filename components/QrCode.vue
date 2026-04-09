@@ -2,48 +2,48 @@
   <div class="space-y-6">
     <VaCard>
       <VaCardContent>
-        <div class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Content</div>
+        <div class="text-xs font-bold text-primary uppercase tracking-widest mb-4">Content Source</div>
         <VaTextarea
           v-model="text"
           placeholder="Type text, URL, phone, or formatted content (e.g., tel:+1234567890)"
           :min-rows="4"
           autosize
-          class="w-full font-mono text-sm mb-4"
+          class="w-full font-mono text-sm mb-6"
         />
 
-        <VaAlert v-if="error" color="danger" dense class="mb-4">
+        <VaAlert v-if="error" color="danger" dense class="mb-6">
           {{ error }}
         </VaAlert>
 
-        <div v-if="text && svg" class="mt-8 flex flex-col items-center">
-          <div class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6">QR Code Preview</div>
-          <div class="p-6 bg-white rounded-2xl shadow-sm border border-gray-100 preview-container" ref="previewContainer" v-html="svg"></div>
-          <div class="mt-6">
-            <VaButton size="small" preset="secondary" icon="download" @click="downloadSVG">Download SVG</VaButton>
+        <div v-if="text && svg" class="mt-10 flex flex-col items-center">
+          <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-6">QR Code Preview</div>
+          <div class="p-8 bg-white rounded-3xl shadow-lg border border-gray-100 preview-container" ref="previewContainer" v-html="svg"></div>
+          <div class="mt-8">
+            <VaButton size="medium" icon="download" @click="downloadSVG">Download SVG</VaButton>
           </div>
         </div>
-        <div v-else class="mt-8 py-12 text-center bg-gray-50 rounded-xl border border-dashed border-gray-200 text-gray-400">
-          <VaIcon name="qr_code_2" size="large" class="mb-2 opacity-20" />
-          <p>Enter content to generate preview</p>
+        <div v-else class="mt-10 py-16 text-center bg-gray-50/50 rounded-2xl border border-dashed border-gray-200 text-gray-400 flex flex-col items-center justify-center">
+          <VaIcon name="qr_code_2" size="48px" class="mb-4 opacity-10" />
+          <p class="text-sm font-medium">Enter content above to generate QR code</p>
         </div>
       </VaCardContent>
     </VaCard>
 
     <VaCard>
       <VaCardContent>
-        <div class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-6">Common Examples</div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="text-xs font-bold text-primary uppercase tracking-widest mb-6">Common Examples</div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <div
             v-for="ex in examples"
             :key="ex.label"
-            class="p-3 rounded-lg border border-gray-100 bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer flex items-center justify-between group"
+            class="p-4 rounded-xl border border-gray-100 bg-gray-50 hover:bg-white hover:shadow-md hover:border-primary/20 transition-all cursor-pointer flex items-center justify-between group"
             @click="applyExample(ex.value)"
           >
             <div class="min-w-0 flex-1">
-              <div class="text-xs font-bold text-primary uppercase tracking-wider">{{ ex.label }}</div>
-              <div class="text-sm text-gray-600 truncate">{{ ex.value }}</div>
+              <div class="text-[10px] font-bold text-primary uppercase tracking-widest mb-1">{{ ex.label }}</div>
+              <div class="text-sm text-gray-600 truncate font-mono">{{ ex.value }}</div>
             </div>
-            <VaButton size="small" preset="plain" icon="arrow_forward" class="opacity-0 group-hover:opacity-100 transition-opacity" />
+            <VaButton size="small" preset="plain" icon="arrow_forward" class="ml-2 opacity-0 group-hover:opacity-100 transition-opacity" />
           </div>
         </div>
       </VaCardContent>

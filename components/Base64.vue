@@ -2,36 +2,38 @@
   <div class="space-y-6">
     <VaCard>
       <VaCardContent>
-        <div class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Input</div>
+        <div class="text-xs font-bold text-primary uppercase tracking-widest mb-4">Input Text</div>
         <VaTextarea
           v-model="input"
           placeholder="Paste or type text here..."
           :min-rows="8"
           autosize
-          class="w-full font-mono text-sm mb-4"
+          class="w-full font-mono text-sm mb-6"
         />
         
-        <div class="flex gap-3 mb-6">
+        <div class="flex gap-3 mb-8">
           <VaButton @click="encode" icon="lock">Encode</VaButton>
           <VaButton @click="decode" icon="lock_open" preset="secondary">Decode</VaButton>
           <VaButton @click="clear" preset="secondary" border-color="warning">Clear</VaButton>
         </div>
 
-        <VaAlert v-if="message" color="danger" dense class="mb-4">
+        <VaAlert v-if="message" color="danger" dense class="mb-6">
           {{ message }}
         </VaAlert>
 
-        <div class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4 mt-8">Output</div>
-        <VaTextarea
-          v-model="output"
-          readonly
-          placeholder="Result will appear here..."
-          :min-rows="8"
-          autosize
-          class="w-full font-mono text-sm"
-        />
-        <div class="mt-4 flex justify-end" v-if="output">
-          <VaButton size="small" preset="secondary" icon="content_copy" @click="copyToClipboard(output)">Copy Output</VaButton>
+        <div class="text-xs font-bold text-primary uppercase tracking-widest mb-4">Output Result</div>
+        <div class="relative group">
+          <VaTextarea
+            v-model="output"
+            readonly
+            placeholder="Result will appear here..."
+            :min-rows="8"
+            autosize
+            class="w-full font-mono text-sm bg-gray-50/50"
+          />
+          <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity" v-if="output">
+            <VaButton size="small" preset="secondary" icon="content_copy" @click="copyToClipboard(output)">Copy</VaButton>
+          </div>
         </div>
       </VaCardContent>
     </VaCard>
