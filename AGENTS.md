@@ -6,7 +6,7 @@ Scope: the entire repository (`/`). If a more specific `AGENTS.md` appears in a 
 
 ## Project Overview
 
-- Stack: Nuxt 3 + Vue 3 (Single File Components), Vuestic UI (`Va*` components), Yarn.
+- Stack: Nuxt 3 + Vue 3 (Single File Components), Vuestic UI (`Va*` components), npm.
 - Structure:
   - `pages/index.vue` hosts a tabbed toolbox UI. Each tab renders a component from `components/`.
   - `components/` contains feature tools (e.g., `Time.vue`, `Base64.vue`, `Json.vue`, `Url.vue`, `PasswordGenerator.vue`).
@@ -14,9 +14,9 @@ Scope: the entire repository (`/`). If a more specific `AGENTS.md` appears in a 
 
 ## Run and Build
 
-- Dev: `yarn dev`
-- Build: `yarn build`
-- Preview: `yarn preview` (if configured) or serve `.output/` as per Nuxt defaults.
+- Dev: `npm run dev`
+- Build: `npm run build`
+- Preview: `npm run preview` (if configured) or serve `.output/` as per Nuxt defaults.
 
 Network access can be restricted in the agent harness; avoid adding dependencies unless approved by the user.
 
@@ -63,7 +63,7 @@ Network access can be restricted in the agent harness; avoid adding dependencies
 - Planning: For multi-step or ambiguous tasks, use the plan tool to outline steps and update status as you progress.
 - Preambles: Before grouped commands, send a brief preamble describing the next action.
 - Editing files: Use the `apply_patch` tool to add/update files. Do not run destructive commands unless explicitly requested by the user.
-- Validation: If the project runs locally, you may propose running `yarn dev` or `yarn build` to validate, but only run such commands when appropriate for the current approval mode.
+- Validation: If the project runs locally, you may propose running `npm run dev` or `npm run build` to validate, but only run such commands when appropriate for the current approval mode.
 - Do not add or modify licenses/copyright headers unless asked.
 
 ## Don’ts
@@ -81,4 +81,3 @@ Network access can be restricted in the agent harness; avoid adding dependencies
 ## File Ownership
 
 This `AGENTS.md` governs the repository root. More specific `AGENTS.md` files placed in subdirectories may override guidance for files within their scope.
-
