@@ -16,7 +16,7 @@
     "moment": "^2.31.0",
     "moment-timezone": "^0.6.0",
     "nuxt": "^4.4.7",
-    "vue": "^3.5.30",
+    "vue": "^3.5.44",
     "vue-json-pretty": "^2.5.0",
     "vuestic-ui": "^1.10.3"
   },
